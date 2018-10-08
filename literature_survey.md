@@ -41,3 +41,13 @@ http://www.econ.yale.edu//~shiller/pubs/p0616.pdf
   year={1984},
   publisher={JSTOR}
 }
+
+
+The Dwindling Taxable Share Of U.S. Corporate Stock
+http://taxwatch.org.au/wp-content/uploads/2016/05/The-dwindling-taxable-share-of-US-corporate-stock.pdf
+
+@article{rosenthal2016dwindling,
+  title={The dwindling taxable share of US corporate stock},
+  author={Rosenthal, Steve and Austin, Lydia},
+  year={2016}
+}
