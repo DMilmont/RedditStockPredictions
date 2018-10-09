@@ -53,6 +53,8 @@ http://taxwatch.org.au/wp-content/uploads/2016/05/The-dwindling-taxable-share-of
 }
 
 
+
+
 Arvindhen's Literature
 Sentiment Analysis visualization
 https://www.csc2.ncsu.edu/faculty/healey/tweet_viz/tweet_app/
@@ -63,3 +65,22 @@ https://onlinelibrary.wiley.com/doi/pdf/10.1111/cgf.13217
 
 Large-Scale Sentiment Analysis for News and Blogs
 http://www.uvm.edu/pdodds/files/papers/others/2007/godbole2007a.pdf
+
+
+
+
+Rachel's Literature
+Predicting Stock Market Indicators Through Twitter “I hope it is not as bad as I fear”
+https://www.sciencedirect.com/science/article/pii/S1877042811023895
+
+Twitter mood predicts the stock market
+https://www.sciencedirect.com/science/article/pii/S187775031100007X
+
+Automatic mood classification of Indonesian tweets using linguistic approach
+https://ieeexplore.ieee.org/abstract/document/6676208
+
+Predicting stock price movements from past returns: the role of consistency and tax-loss selling
+https://www.sciencedirect.com/science/article/pii/S0304405X03001764
+
+A Neural Network Approach to Predicting Stock Exchange Movements using External Factors
+https://link.springer.com/chapter/10.1007/1-84628-224-1_6
