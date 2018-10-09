@@ -69,7 +69,8 @@ http://www.uvm.edu/pdodds/files/papers/others/2007/godbole2007a.pdf
 
 
 
-Rachel's Literature
+Rachel Literature:
+
 Predicting Stock Market Indicators Through Twitter “I hope it is not as bad as I fear”
 https://www.sciencedirect.com/science/article/pii/S1877042811023895
 
