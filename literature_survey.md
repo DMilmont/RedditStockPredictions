@@ -85,3 +85,17 @@ https://www.sciencedirect.com/science/article/pii/S0304405X03001764
 
 A Neural Network Approach to Predicting Stock Exchange Movements using External Factors
 https://link.springer.com/chapter/10.1007/1-84628-224-1_6
+
+
+
+
+Colin Literature:
+
+News impact on stock price return via sentiment analysis
+https://www.sciencedirect.com/science/article/pii/S0950705114001440
+
+Combining News and Technical Indicators in Daily Stock Price Trends Prediction
+https://link.springer.com/chapter/10.1007/978-3-540-72395-0_132
+
+Using News Articles to Predict Stock Price Movements
+https://people.kth.se/~gyozo/docs/financial-prediction.pdf
