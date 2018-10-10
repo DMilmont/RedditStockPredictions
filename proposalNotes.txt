@@ -17,6 +17,9 @@ https://developer.twitter.com/en/docs.html
 9 Heilmeier questions (source)
 1. What are you trying to do? Articulate your objectives using absolutely no jargon.
   Classify which stocks are heavily influenced by social/online media.
+  "This paper investigates the extent to which investor
+opinions transmitted through [reddit] social media predict future stock returns and earnings
+surprises."
 
 2. How is it done today; what are the limits of current practice?
   TBD by lit survey
