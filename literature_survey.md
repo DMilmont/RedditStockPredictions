@@ -56,12 +56,14 @@ http://taxwatch.org.au/wp-content/uploads/2016/05/The-dwindling-taxable-share-of
 
 
 Arvindhen's Literature
+
 Sentiment Analysis visualization
 https://www.csc2.ncsu.edu/faculty/healey/tweet_viz/tweet_app/
 
 
 The State of the Art in Sentiment Visualization
 https://onlinelibrary.wiley.com/doi/pdf/10.1111/cgf.13217
+
 
 Large-Scale Sentiment Analysis for News and Blogs
 http://www.uvm.edu/pdodds/files/papers/others/2007/godbole2007a.pdf
