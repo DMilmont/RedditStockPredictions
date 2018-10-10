@@ -99,3 +99,12 @@ https://link.springer.com/chapter/10.1007/978-3-540-72395-0_132
 
 Using News Articles to Predict Stock Price Movements
 https://people.kth.se/~gyozo/docs/financial-prediction.pdf
+
+Evaluating multiple classifiers for stock price direction prediction
+https://www.sciencedirect.com/science/article/pii/S0957417415003334
+
+Comparison of ARIMA and Artificial Neural Networks Models for Stock Price Predictio
+https://www.hindawi.com/journals/jam/2014/614342/abs/
+
+Stock Price Prediction Using the ARIMA Model
+https://ieeexplore.ieee.org/abstract/document/7046047?reload=true
