@@ -165,20 +165,53 @@ https://link.springer.com/chapter/10.1007/1-84628-224-1_6
 
 Colin Literature:
 
-News impact on stock price return via sentiment analysis
-https://www.sciencedirect.com/science/article/pii/S0950705114001440
+Stock Prediction Using Event-based Sentiment Analysis 
 
-Combining News and Technical Indicators in Daily Stock Price Trends Prediction
-https://link.springer.com/chapter/10.1007/978-3-540-72395-0_132
+@inproceedings{makrehchi2013stock,
+  title={Stock prediction using event-based sentiment analysis},
+  author={Makrehchi, Masoud and Shah, Sameena and Liao, Wenhui},
+  booktitle={Proceedings of the 2013 IEEE/WIC/ACM International Joint Conferences on Web Intelligence (WI) and Intelligent Agent Technologies (IAT)-Volume 01},
+  pages={337--342},
+  year={2013},
+  organization={IEEE Computer Society}
+}
+This paper examines a stock prediction model using sentiment analysis from past stock events. Many of the sections in this paper are associated to the goal of our project, including related work, classification, sentiment analysis, and a predication algorithm. Where our project will differ is that this paper used past event data to train a model to predict future stock behavior using Twitter. We will have a different data source and model, however much of this paper should still be useful for our goals.
 
-Using News Articles to Predict Stock Price Movements
-https://people.kth.se/~gyozo/docs/financial-prediction.pdf
 
-Evaluating multiple classifiers for stock price direction prediction
-https://www.sciencedirect.com/science/article/pii/S0957417415003334
+Text mining approaches for stock market prediction 
 
-Comparison of ARIMA and Artificial Neural Networks Models for Stock Price Predictio
-https://www.hindawi.com/journals/jam/2014/614342/abs/
+@inproceedings{nikfarjam2010text,
+  title={Text mining approaches for stock market prediction},
+  author={Nikfarjam, Azadeh and Emadzadeh, Ehsan and Muthaiyah, Saravanan},
+  booktitle={Computer and Automation Engineering (ICCAE), 2010 The 2nd International Conference on},
+  volume={4},
+  pages={256--260},
+  year={2010},
+  organization={IEEE}
+}
+This paper investigates the impact of financial news articles on stock prices. The authors mined the text from headlines, attempted to classify the articles, and examined the window of time where the news articles would affect stock prices. The methods used in this paper are similar to what we will need to do for our project and should be useful in our research for the project, except we will be using a different source of data, which presents different challenges. 
 
-Stock Price Prediction Using the ARIMA Model
-https://ieeexplore.ieee.org/abstract/document/7046047?reload=true
+
+Comparison of ARIMA and Artificial Neural Networks Models for Stock Price Prediction 
+
+@article{adebiyi2014comparison,
+  title={Comparison of ARIMA and artificial neural networks models for stock price prediction},
+  author={Adebiyi, Ayodele Ariyo and Adewumi, Aderemi Oluyinka and Ayo, Charles Korede},
+  journal={Journal of Applied Mathematics},
+  volume={2014},
+  year={2014},
+  publisher={Hindawi}
+}
+This paper compares what the authors describe as the two main categories of techniques for predicting sock prices – “statistical” and “soft” techniques. Since the goal of our project is to examine how sentiment in social media effects stock price movements, it might be useful to examine other methods of prediction. Implementing some of the techniques described in this paper might be useful as a comparison tool in our project, to determine whether the change in stock price was due to social media sentiment or other factors.  
+
+
+Using News Articles to Predict Stock Price Movements 
+
+@article{gidofalvi2001using,
+  title={Using news articles to predict stock price movements},
+  author={Gidofalvi, Gyozo and Elkan, Charles},
+  journal={Department of Computer Science and Engineering, University of California, San Diego},
+  year={2001}
+}
+This paper attempts to use news articles to predict stock price fluctuations. The goal of this paper is similar to the goal of our project, but we will be using more modern analytical methods, and social media sentiment instead of news articles. Still, some of the methods, goals and approaches should be applicable. Specifically, the importance of classifying the sentiment of our inputs, as well as demonstrating the effect this has on price movement will be crucial. 
+
