@@ -3,6 +3,18 @@ David Milmont Literature:
 Wisdom of Crowds: The Value of Stock Opinions Transmitted Through Social Media
 https://www.hedgechatter.com/wp-content/uploads/2014/09/wisdom-of-crowds.pdf
 
+Social media has become a popular venue for individuals to share the results of their own
+analysis on financial securities. This paper investigates the extent to which investor
+opinions transmitted through social media predict future stock returns and earnings
+surprises. By utilizing a social media outlet to examine the value relevance of peer opinions, our study is
+perhaps most closely related to those of Tumarkin and Whitelaw (2001), Antweiler and Frank (2004) and
+Das and Chen (2007), who examine how conversations on Internet message boards associate with stock
+returns. Tumarkin and Whitelaw (2001) detect no association; Das and Chen (2007) find “no strong
+relationship from sentiment to stock prices on average across the individual stocks” (page 1385); and
+Antweiler and Frank (2004) find a statistically significant, yet economically meaningless, association. 
+Together, the results presented in these studies suggest that social media outlets cannot predict stock returns. In sharp contrast, the pattern documented here is both statistically significant and economically
+meaningful.
+
 @article{chen2014wisdom,
   title={Wisdom of crowds: The value of stock opinions transmitted through social media},
   author={Chen, Hailiang and De, Prabuddha and Hu, Yu Jeffrey and Hwang, Byoung-Hyoun},
@@ -16,6 +28,23 @@ https://www.hedgechatter.com/wp-content/uploads/2014/09/wisdom-of-crowds.pdf
 
 Sentiment analysis on social media for stock movement prediction
 https://www.jaist.ac.jp/~s1220203/images/thien_ESWA2015.pdf
+
+In addition to historical prices, the current
+stock market is affected by the mood of society. The overall social
+mood with respect to a given company might be one of the important
+variables which affect the stock price of that company. Nowadays, the
+emergence of online social networks makes available large amounts
+of mood data. Therefore, incorporating information from social media
+with the historical prices can improve the predictive ability of
+models. One contribution of this paper is that we propose a novel feature
+‘topic-sentiment’ to improve the performance of stock market prediction.
+It is important to recognize what topics are discussed in social
+media and how people feel about these topics. The ‘topic-sentiment’
+feature, which represents the sentiments of the specific topics of the
+company (product, service, dividend and so on), are used for prediction
+of stock price movement.To the best of our knowledge, this is the
+first research trying to extract topics and sentiments simultaneously
+and utilize them for stock market prediction.
 
 @article{nguyen2015sentiment,
   title={Sentiment analysis on social media for stock movement prediction},
@@ -31,6 +60,8 @@ https://www.jaist.ac.jp/~s1220203/images/thien_ESWA2015.pdf
 Stock Prices and Social Dynamics
 http://www.econ.yale.edu//~shiller/pubs/p0616.pdf
 
+Investing in speculative assets is a social activity. Investors spend a substantial part of their leisure time discussing investments, reading about investments, or gossiping about others' successes or failures in investing. It is thus plausible that investor's behavior (and hence prices of speculative assets) would be influenced by social movements. 
+
 @article{shiller1984stock,
   title={Stock prices and social dynamics},
   author={Shiller, Robert J and Fischer, Stanley and Friedman, Benjamin M},
@@ -42,6 +73,14 @@ http://www.econ.yale.edu//~shiller/pubs/p0616.pdf
   publisher={JSTOR}
 }
 
+
+The Fed reported that in 2015, households directly
+owned 37.3 percent of corporate equity.11
+Households owned another 13 percent indirectly
+through mutual funds (and more through ETFs and
+CEFs).12 In total, the Fed reported that households
+owned more than 50.3 percent of the value of
+outstanding U.S. stock.
 
 The Dwindling Taxable Share Of U.S. Corporate Stock
 http://taxwatch.org.au/wp-content/uploads/2016/05/The-dwindling-taxable-share-of-US-corporate-stock.pdf
