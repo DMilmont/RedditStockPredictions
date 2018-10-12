@@ -215,3 +215,52 @@ Using News Articles to Predict Stock Price Movements
 }
 This paper attempts to use news articles to predict stock price fluctuations. The goal of this paper is similar to the goal of our project, but we will be using more modern analytical methods, and social media sentiment instead of news articles. Still, some of the methods, goals and approaches should be applicable. Specifically, the importance of classifying the sentiment of our inputs, as well as demonstrating the effect this has on price movement will be crucial. 
 
+
+Narsing's Literature
+
+1. Cryptocurrency Price Prediction Using Tweet Volumes and Sentiment Analysis
+
+Link: https://scholar.smu.edu/datasciencereview/vol1/iss3/1/
+
+@article{abraham2018cryptocurrency,
+  title={Cryptocurrency Price Prediction Using Tweet Volumes and Sentiment Analysis},
+  author={Abraham, Jethin and Higdon, Daniel and Nelson, John and Ibarra, Juan},
+  journal={SMU Data Science Review},
+  volume={1},
+  number={3},
+  pages={1},
+  year={2018}
+}
+
+Survey Text: This survey has an interesting take on price prediction of crypto currencies based on the volume of tweets vs the actual sentiment of the tweets. The survey argues that the are able to prove that the actual volume of the tweets matter more than that the sentiment the tweets express. The survey builds on top of previous research done around Google Trends Data and predicting macroeconomic data. Building on top of this, we are going to attempt to see how the volume of reddit posts help predict the price movement of stocks rather than sentiment alone. 
+
+
+2. Using NLP on news headlines to predict index trends 
+
+Link: https://arxiv.org/pdf/1806.09533.pdf
+
+@article{velay2018using,
+  title={Using NLP on news headlines to predict index trends},
+  author={Velay, Marc and Daniel, Fabrice},
+  journal={arXiv preprint arXiv:1806.09533},
+  year={2018}
+}
+
+Survey Text: Users of Microblogging sites usually express their sentiments along with links to news articles upon which their actual sentiment is based on. This paper discusses different AI techniques and machine learning algorithms such as Natural Language Processing, Long Short- Term Memory (LSTM), Multi-Layer Perceptron (MLP), SVM, Logistic Regression, Random Forest 
+and their effectiveness in predicting stock market indexes. Our team will attempt to use similar techniques to break down the reddit posts, the links shared in the post and if those links are news articles, try and attempt to run NLP techniques on those news articles as well to arrive at a dependable sentiment score.
+
+
+3. Sentiment Analysis of Event Driven Stock Market Price Prediction 
+
+Link: http://www.jncet.org/Manuscripts/Volume-8/Issue-4/Vol-8-issue-4-M-28.pdf
+
+@article{kaushik2018sentiment,
+  title={Sentiment Analysis of Event Driven Stock Market Price Prediction},
+  author={Kaushik, Vikrant Kumar and Gupta, Arjun Kumar and Kumar, Ashish and Prasad, Abhishek and Lalitha, B},
+  journal={Journal of Network Communications and Emerging Technologies (JNCET) www. jncet. org},
+  volume={8},
+  number={4},
+  year={2018}
+}
+
+Survey Text: Even when investors go long on certain stocks, they will always be happy to build the stocks they are set on for a cheaper price. For this, investors wait for the price of the stock to decrease and buy them. This fluctuation to stock prices is given by various events. While we know that events create volatility of stocks, to predict the degree of volatility helps investors get a better bargain for buying or selling stocks. This survey discuss on how sentiment analysis can help predict market fluctuation which can there by provide better buys and sells to investors.  
