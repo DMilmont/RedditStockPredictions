@@ -145,22 +145,76 @@ Survey: Over the last decade micro blogging sites such as twitter, reddit have g
 
 Rachel Literature:
 
-Predicting Stock Market Indicators Through Twitter “I hope it is not as bad as I fear”
-https://www.sciencedirect.com/science/article/pii/S1877042811023895
-
 Twitter mood predicts the stock market
 https://www.sciencedirect.com/science/article/pii/S187775031100007X
+@article{bollen2011twitter,
+  title={Twitter mood predicts the stock market},
+  author={Bollen, Johan and Mao, Huina and Zeng, Xiaojun},
+  journal={Journal of computational science},
+  volume={2},
+  number={1},
+  pages={1--8},
+  year={2011},
+  publisher={Elsevier}
+}
+
+Survey:
+Talks about using OpinionFinder and GPOMS tools to determine tweet, then a causality analysis of the past N days with current DJIA stock prices to determine if adding public mood improves price prediction. This paper goes into the general public mood of the country, with general stock prices, it does not dive into sentiment on a particular brand/stock.
 
 Automatic mood classification of Indonesian tweets using linguistic approach
 https://ieeexplore.ieee.org/abstract/document/6676208
+@inproceedings{wijaya2013automatic,
+  title={Automatic mood classification of Indonesian tweets using linguistic approach},
+  author={Wijaya, Viktor and Erwin, Alva and Galinium, Maulahikmah and Muliady, Wahyu},
+  booktitle={Information Technology and Electrical Engineering (ICITEE), 2013 International Conference on},
+  pages={41--46},
+  year={2013},
+  organization={IEEE}
+}
+Survey:
+This paper explores a lexicon based approach for identifying the parts of speech, main phrase, and mood of a tweet. Compared to Naive bayes and SVM, this approach has a much higher accuracy but is highly dependant on the crowd-sourced categorization used as a training set, and slang/abbreviations existing in the lexicon used.
 
+
+Predicting Stock Market Indicators Through Twitter “I hope it is not as bad as I fear”
+@article{zhang2011predicting,
+  title={Predicting stock market indicators through twitter “I hope it is not as bad as I fear”},
+  author={Zhang, Xue and Fuehres, Hauke and Gloor, Peter A},
+  journal={Procedia-Social and Behavioral Sciences},
+  volume={26},
+  pages={55--62},
+  year={2011},
+  publisher={Elsevier}
+}
+https://www.sciencedirect.com/science/article/pii/S1877042811023895
+
+Survey: This paper identifies a tweet as postive or negative then compares the mood of the given day with the stock market for the same day. They used a relatively simple way of categorizing tweets (based on a single word) and didn't talk about the accuracy of mood classifcation. Ie "I hope it's not true" would be worrisome, and thus negative but their algorithm only considered the word "hope" and thus labeled it as positive. Additonally tweets without any of their predefined set of words in them would be thrown out as not having a mood.
+
+
+
+Extra articles:
 Predicting stock price movements from past returns: the role of consistency and tax-loss selling
+@article{grinblatt2004predicting,
+  title={Predicting stock price movements from past returns: The role of consistency and tax-loss selling},
+  author={Grinblatt, Mark and Moskowitz, Tobias J},
+  journal={Journal of Financial Economics},
+  volume={71},
+  number={3},
+  pages={541--579},
+  year={2004},
+  publisher={Elsevier}
+}
 https://www.sciencedirect.com/science/article/pii/S0304405X03001764
 
 A Neural Network Approach to Predicting Stock Exchange Movements using External Factors
 https://link.springer.com/chapter/10.1007/1-84628-224-1_6
-
-
+@incollection{o2006neural,
+  title={A neural network approach to predicting stock exchange movements using external factors},
+  author={O’Connor, Niall and Madden, Michael G},
+  booktitle={Applications and Innovations in Intelligent Systems XIII},
+  pages={64--77},
+  year={2006},
+  publisher={Springer}
+}
 
 
 Colin Literature:
