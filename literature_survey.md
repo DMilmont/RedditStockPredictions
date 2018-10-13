@@ -1,6 +1,6 @@
 David Milmont Literature:
 
-Wisdom of Crowds: The Value of Stock Opinions Transmitted Through Social Media
+Wisdom of Crowds: The Value of Stock Opinions Transmitted Through Social Media 
 https://www.hedgechatter.com/wp-content/uploads/2014/09/wisdom-of-crowds.pdf
 
 Social media has become a popular venue for individuals to share the results of their own
@@ -57,7 +57,7 @@ and utilize them for stock market prediction.
   publisher={Elsevier}
 }
 
-Stock Prices and Social Dynamics
+Stock Prices and Social Dynamics [1]
 http://www.econ.yale.edu//~shiller/pubs/p0616.pdf
 
 Investing in speculative assets is a social activity. Investors spend a substantial part of their leisure time discussing investments, reading about investments, or gossiping about others' successes or failures in investing. It is thus plausible that investor's behavior (and hence prices of speculative assets) would be influenced by social movements. 
@@ -161,7 +161,7 @@ https://www.sciencedirect.com/science/article/pii/S187775031100007X
 Survey:
 Talks about using OpinionFinder and GPOMS tools to determine tweet, then a causality analysis of the past N days with current DJIA stock prices to determine if adding public mood improves price prediction. This paper goes into the general public mood of the country, with general stock prices, it does not dive into sentiment on a particular brand/stock.
 
-Automatic mood classification of Indonesian tweets using linguistic approach
+Automatic mood classification of Indonesian tweets using linguistic approach [2]
 https://ieeexplore.ieee.org/abstract/document/6676208
 @inproceedings{wijaya2013automatic,
   title={Automatic mood classification of Indonesian tweets using linguistic approach},
@@ -175,7 +175,7 @@ Survey:
 This paper explores a lexicon based approach for identifying the parts of speech, main phrase, and mood of a tweet. Compared to Naive bayes and SVM, this approach has a much higher accuracy but is highly dependant on the crowd-sourced categorization used as a training set, and slang/abbreviations existing in the lexicon used.
 
 
-Predicting Stock Market Indicators Through Twitter “I hope it is not as bad as I fear”
+Predicting Stock Market Indicators Through Twitter “I hope it is not as bad as I fear” 
 @article{zhang2011predicting,
   title={Predicting stock market indicators through twitter “I hope it is not as bad as I fear”},
   author={Zhang, Xue and Fuehres, Hauke and Gloor, Peter A},
@@ -259,7 +259,7 @@ Comparison of ARIMA and Artificial Neural Networks Models for Stock Price Predic
 This paper compares what the authors describe as the two main categories of techniques for predicting sock prices – “statistical” and “soft” techniques. Since the goal of our project is to examine how sentiment in social media effects stock price movements, it might be useful to examine other methods of prediction. Implementing some of the techniques described in this paper might be useful as a comparison tool in our project, to determine whether the change in stock price was due to social media sentiment or other factors.  
 
 
-Using News Articles to Predict Stock Price Movements 
+Using News Articles to Predict Stock Price Movements
 
 @article{gidofalvi2001using,
   title={Using news articles to predict stock price movements},
