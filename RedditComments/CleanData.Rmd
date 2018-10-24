@@ -21,6 +21,7 @@ bqr_query("big-query-r","samples",
 
 
 SELECT * FROM `fh-bigquery.reddit_posts.2018_05` where subreddit = 'wallstreetbets';
-SELECT * FROM [fh-bigquery:reddit_comments.2018_05] WHERE subreddit = 'wallstreetbets' 
+SELECT * FROM [fh-bigquery:reddit_comments.2018_05] WHERE subreddit = 'wallstreetbets'
+https://s3.console.aws.amazon.com/s3/buckets/cse6242-reddit-data/
 ```
 
