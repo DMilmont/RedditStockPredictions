@@ -1,0 +1,26 @@
+---
+title: "Grabbing Reddit Posts"
+output: html_notebook
+---
+
+```{r warning=FALSE}
+
+library(tidyverse)
+library(bigQueryR)
+
+```
+
+```{r}
+## this will open your browser
+## Authenticate with an email that has access to the BigQuery project you need
+bqr_auth()
+```
+```{r}
+bqr_query("big-query-r","samples",
+          "SELECT COUNT(repository.url) FROM [publicdata:samples.github_nested]")
+
+
+SELECT * FROM `fh-bigquery.reddit_posts.2018_05` where subreddit = 'wallstreetbets';
+SELECT * FROM [fh-bigquery:reddit_comments.2018_05] WHERE subreddit = 'wallstreetbets' 
+```
+
