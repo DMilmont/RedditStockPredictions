@@ -6,22 +6,90 @@ output: html_notebook
 ```{r warning=FALSE}
 
 library(tidyverse)
-library(bigQueryR)
+library(tidytext)
 
 ```
 
-```{r}
-## this will open your browser
-## Authenticate with an email that has access to the BigQuery project you need
-bqr_auth()
-```
-```{r}
-bqr_query("big-query-r","samples",
-          "SELECT COUNT(repository.url) FROM [publicdata:samples.github_nested]")
-
-
+Data from big query obtained with this:
 SELECT * FROM `fh-bigquery.reddit_posts.2018_05` where subreddit = 'wallstreetbets';
 SELECT * FROM [fh-bigquery:reddit_comments.2018_05] WHERE subreddit = 'wallstreetbets'
 https://s3.console.aws.amazon.com/s3/buckets/cse6242-reddit-data/
+
+
+This will combine all the csv files in the folder structure
+```{r}
+file_names_comments <- dir('./comments/') #where you have your files
+file_names_posts <- dir('./posts/') #where you have your files
+
+setwd("C:/Users/Dave/6242Project/RedditComments/comments")
+comments <- do.call(rbind,lapply(file_names_comments,read.csv))
+setwd("C:/Users/Dave/6242Project/RedditComments/posts")
+posts <- do.call(rbind,lapply(file_names_posts,read.csv))
 ```
+
+
+
+comments and posts can be joined on id as primary key 
+
+Each post has a css_class name which is basically a tag for the type of post. We should only focus on the good tags. Something like "shitpost" contains what it says, shit.
+
+We should only look at posts with the following tags: futures, options, yolo, earnings, loss, fundamentals, question, stocks, technicals, daily, dd, and profit. 
+
+Unfortunately the majority of posts are not tagged, and there appears to be a high average score. This may indicate that tagging did not start until recently. 
+```{r}
+
+#tagged categories ordered by avgscore and count
+posts %>% 
+  group_by(link_flair_css_class) %>% 
+  summarize(count = n(),
+            avgScore = mean(score)
+            ) %>% 
+  arrange(desc(avgScore,count))
+
+```
+
+fixing column types
+add link_id to posts with t3_ concat to match format of id in comments. 
+https://www.reddit.com/r/datasets/comments/65wb9a/combining_reddit_comments_and_posts_in_the_reddit/
+```{r}
+posts <- posts %>% 
+  mutate(id = as.character(id),
+         from_id = as.character(from_id),
+         link_id = paste("t3_",id, sep = "")
+         )
+
+comments <- comments %>% 
+  mutate(id = as.character(id),
+         link_id = as.character(link_id))
+
+```
+
+
+
+created_utc timestamp comes as a unix timestamp in seconds. Clearing this up. Making new column with EST timestamp. 
+```{r}
+posts <- posts %>% 
+  mutate(created_utc_converted = lubridate::as_datetime(created_utc),
+         created_date_time_UTC = lubridate::force_tz(created_utc_converted, tzone = "UTC"),
+         created_date_time_EST = lubridate::force_tzs(created_date_time_UTC, tzones = "UTC", tzone_out = "America/New_York")
+         )
+
+comments <- comments %>% 
+  mutate(created_utc_converted = lubridate::as_datetime(created_utc),
+         created_date_time_UTC = lubridate::force_tz(created_utc_converted, tzone = "UTC"),
+         created_date_time_EST = lubridate::force_tzs(created_date_time_UTC, tzones = "UTC", tzone_out = "America/New_York")
+         )
+```
+
+
+Example of joining comments and posts and filtering by css class. 
+We will want to narrow down the columns that are returned here. 
+```{r}
+daily_full <- posts %>% 
+  filter(link_flair_css_class == "daily") %>% 
+  inner_join(comments, by = c("link_id"))
+
+```
+
+
 

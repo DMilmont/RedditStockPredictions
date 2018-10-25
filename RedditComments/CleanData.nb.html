@@ -196,48 +196,59 @@ $(document).ready(function () {
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<p>Data from big query obtained with this: SELECT * FROM <code>fh-bigquery.reddit_posts.2018_05</code> where subreddit = ‘wallstreetbets’; SELECT * FROM [fh-bigquery:reddit_comments.2018_05] WHERE subreddit = ‘wallstreetbets’ <a href="https://s3.console.aws.amazon.com/s3/buckets/cse6242-reddit-data/" class="uri">https://s3.console.aws.amazon.com/s3/buckets/cse6242-reddit-data/</a></p>
+<p>This will combine all the csv files in the folder structure</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyMgdGhpcyB3aWxsIG9wZW4geW91ciBicm93c2VyXG4jIyBBdXRoZW50aWNhdGUgd2l0aCBhbiBlbWFpbCB0aGF0IGhhcyBhY2Nlc3MgdG8gdGhlIEJpZ1F1ZXJ5IHByb2plY3QgeW91IG5lZWRcbmJxcl9hdXRoKClcbmBgYCJ9 -->
-<pre class="r"><code>## this will open your browser
-## Authenticate with an email that has access to the BigQuery project you need
-bqr_auth()</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmlsZV9uYW1lc19jb21tZW50cyA8LSBkaXIoJy4vY29tbWVudHMvJykgI3doZXJlIHlvdSBoYXZlIHlvdXIgZmlsZXNcbmZpbGVfbmFtZXNfcG9zdHMgPC0gZGlyKCcuL3Bvc3RzLycpICN3aGVyZSB5b3UgaGF2ZSB5b3VyIGZpbGVzXG5zZXR3ZChcIkM6L1VzZXJzL0RhdmUvNjI0MlByb2plY3QvUmVkZGl0Q29tbWVudHMvY29tbWVudHNcIilcbmBgYCJ9 -->
+<pre class="r"><code>file_names_comments &lt;- dir('./comments/') #where you have your files
+file_names_posts &lt;- dir('./posts/') #where you have your files
+setwd(&quot;C:/Users/Dave/6242Project/RedditComments/comments&quot;)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiQWRkaW5nIGJxLm9hdXRoIHRvIC5naXRpZ25vcmVcbldhaXRpbmcgZm9yIGF1dGhlbnRpY2F0aW9uIGluIGJyb3dzZXIuLi5cblByZXNzIEVzYy9DdHJsICsgQyB0byBhYm9ydFxuQXV0aGVudGljYXRpb24gY29tcGxldGUuXG5Ub2tlbiBjYWNoZSBmaWxlOiBicS5vYXV0aFxuIn0= -->
-<pre><code>Adding bq.oauth to .gitignore
-Waiting for authentication in browser...
-Press Esc/Ctrl + C to abort
-Authentication complete.
-Token cache file: bq.oauth</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiVGhlIHdvcmtpbmcgZGlyZWN0b3J5IHdhcyBjaGFuZ2VkIHRvIEM6L1VzZXJzL0RhdmUvNjI0MlByb2plY3QvUmVkZGl0Q29tbWVudHMvY29tbWVudHMgaW5zaWRlIGEgbm90ZWJvb2sgY2h1bmsuIFRoZSB3b3JraW5nIGRpcmVjdG9yeSB3aWxsIGJlIHJlc2V0IHdoZW4gdGhlIGNodW5rIGlzIGZpbmlzaGVkIHJ1bm5pbmcuIFVzZSB0aGUga25pdHIgcm9vdC5kaXIgb3B0aW9uIGluIHRoZSBzZXR1cCBjaHVuayB0byBjaGFuZ2UgdGhlIHdvcmtpbmcgZGlyZWN0b3J5IGZvciBub3RlYm9vayBjaHVua3MuXG4ifQ== -->
+<pre><code>The working directory was changed to C:/Users/Dave/6242Project/RedditComments/comments inside a notebook chunk. The working directory will be reset when the chunk is finished running. Use the knitr root.dir option in the setup chunk to change the working directory for notebook chunks.</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuICBcbiMjIHZlcmlmeSB1bmRlciBhIG5ldyB1c2VyXG5icXJfYXV0aChuZXdfdXNlcj1UUlVFKVxuYGBgIn0= -->
-<pre class="r"><code>  
-## verify under a new user
-bqr_auth(new_user=TRUE)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29tbWVudHMgPC0gZG8uY2FsbChyYmluZCxsYXBwbHkoZmlsZV9uYW1lc19jb21tZW50cyxyZWFkLmNzdikpXG5zZXR3ZChcIkM6L1VzZXJzL0RhdmUvNjI0MlByb2plY3QvUmVkZGl0Q29tbWVudHMvcG9zdHNcIilcbnBvc3RzIDwtIGRvLmNhbGwocmJpbmQsbGFwcGx5KGZpbGVfbmFtZXNfcG9zdHMscmVhZC5jc3YpKVxuYGBgIn0= -->
+<pre class="r"><code>comments &lt;- do.call(rbind,lapply(file_names_comments,read.csv))
+setwd(&quot;C:/Users/Dave/6242Project/RedditComments/posts&quot;)
+posts &lt;- do.call(rbind,lapply(file_names_posts,read.csv))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiMjAxOC0xMC0yNCAxMjozNDoyND4gUmVtb3Zpbmcgb2xkIGNhY2hlZCBjcmVkZW50aWFscyBmcm9tOiBDOlxcVXNlcnNcXERhdmVcXDYyNDJQcm9qZWN0XFxicS5vYXV0aFxuV2FpdGluZyBmb3IgYXV0aGVudGljYXRpb24gaW4gYnJvd3Nlci4uLlxuUHJlc3MgRXNjL0N0cmwgKyBDIHRvIGFib3J0XG5BdXRoZW50aWNhdGlvbiBjb21wbGV0ZS5cblRva2VuIGNhY2hlIGZpbGU6IGJxLm9hdXRoXG4ifQ== -->
-<pre><code>2018-10-24 12:34:24&gt; Removing old cached credentials from: C:\Users\Dave\6242Project\bq.oauth
-Waiting for authentication in browser...
-Press Esc/Ctrl + C to abort
-Authentication complete.
-Token cache file: bq.oauth</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>comments and posts can be joined on id as primary key</p>
+<p>Each post has a css_class name which is basically a tag for the type of post. We should only focus on the good tags. Something like “shitpost” contains what it says, shit.</p>
+<p>We should only look at posts with the following tags: futures, options, yolo, earnings, loss, fundamentals, question, stocks, technicals, daily, dd, and profit.</p>
+<p>Unfortunately the majority of posts are not tagged, and there appears to be a high average score. This may indicate that tagging did not start until recently.</p>
+<!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYnFyX3F1ZXJ5KFwiYmlnLXF1ZXJ5LXJcIixcInNhbXBsZXNcIixcbiAgICAgICAgICBcIlNFTEVDVCBDT1VOVChyZXBvc2l0b3J5LnVybCkgRlJPTSBbcHVibGljZGF0YTpzYW1wbGVzLmdpdGh1Yl9uZXN0ZWRdXCIpXG5cblxuU0VMRUNUICogRlJPTSBgZmgtYmlncXVlcnkucmVkZGl0X3Bvc3RzLjIwMThfMDVgIHdoZXJlIHN1YnJlZGRpdCA9ICd3YWxsc3RyZWV0YmV0cyc7XG5TRUxFQ1QgKiBGUk9NIFtmaC1iaWdxdWVyeTpyZWRkaXRfY29tbWVudHMuMjAxOF8wNV0gV0hFUkUgc3VicmVkZGl0ID0gJ3dhbGxzdHJlZXRiZXRzJ1xuaHR0cHM6Ly9zMy5jb25zb2xlLmF3cy5hbWF6b24uY29tL3MzL2J1Y2tldHMvY3NlNjI0Mi1yZWRkaXQtZGF0YS9cbmBgYCJ9 -->
-<pre class="r"><code>bqr_query(&quot;big-query-r&quot;,&quot;samples&quot;,
-          &quot;SELECT COUNT(repository.url) FROM [publicdata:samples.github_nested]&quot;)
-
-
-SELECT * FROM `fh-bigquery.reddit_posts.2018_05` where subreddit = 'wallstreetbets';
-SELECT * FROM [fh-bigquery:reddit_comments.2018_05] WHERE subreddit = 'wallstreetbets'
-https://s3.console.aws.amazon.com/s3/buckets/cse6242-reddit-data/</code></pre>
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibmNvbCI6MywibnJvdyI6MjF9LCJyZGYiOiJINHNJQUFBQUFBQUFCbDFUUzB3VFFSaWVkdHRTeWtNVUNzWjRJZkdpc0EzMEFUVW1aZ3lQU05RSUVoS2l3YkxzenJZYmxwbXlEeEM5Y0JGVHd3V2pOdzk2TVZ5TUpocXZha3d3TVJJUEdEVjYweGdpZXNGSVlqaTAvc3Z1Rk94a3Yvbi8rZWQvN1B5UEM3Mmo4Y2hvQkNIa1I0SWdJTDhBYk1BUG13OEZVTFZEcnlBa05BSUROMElkMENqQW9UV0EvWUI5Z0loN2p4ekRJTUF4REFDYWRoeTVObzZQQmtBOW9BcFFDd2dERGdCQ0ZVRkRPcGtodXVsWlJEMHA4bWpWaE1Zc0l1ZTRNcUhFeU01NXAxclZwb28wUmFnbGdRUFBRTFV0MnlEOFdLTlJ4VFl0UTl1andmS1d4aWcvaHFkdFlqb0NIc0lnbHFUcC9HUktsbVlRcm12bU5DdlBUS3Q4YXpGNWtuc0tXbEoyaXF0R25MK21tcndiTnpESGRNWlZGUWpCbnhFbWtrRTFtdVdLZmtYaEpqb3p1VFNVTjVpcThjaEh1cVZFWE81S0pzVjA0bmhTN093a2FUSGRyWGFKSFlSMEpaSWRjaXFoSkNzeUhaUjF5ZVNKTHFkZmxXU0xHY0FWdldJN0JTd2cxTEx0OHNJdm9LOEFKd0duQWZjQlIwSGVEM1FXb2J1cVYzem5QQVNPR2ZSRUN6aStCKzVPd0d0R3ZJWndtaUdLcDFNZnZ2MWR1SW16RjMzSHRuSkJmSG5xMlJmNDhOaDh4NS9YNnd0NGRLUDRhS1A0R0k4c0xjb0hWK0o0Nk55SXMvQmdUYXZTZm4wSm55K01MZC81WE1CbnI5MEtIVDcwRlo5NUtEb0xENnhjM1R6RjV2QkErMXRZcTdoL09oUGR6RFRqdnJVWGIvcHVyT1BlNTJ1WHhyY0t1R2Q1Ky8xd200MTdraTlUcmUrZTRQVFQzMjNSWmhOM2YxcDhNUDZqSHljR1A5NU9mYTl6VXllVUtySVZVU1JMaXFrR05GMWxjaW5JZUhJRlQ5aWthM1F5bytxU1ptUmswOHk0QmVEVllEYmw1UXhMTTlsaG1SbVZYcXNOTmh2am5wM2krT2RoSzVWS1A5MkMvYWRjYm16a2IvU0djKysvKzR3S1FZTk5IZGVLS09kc09pbkcwOTUwKzVDNzZ2Wk1OT2NGTjJhQUp5YTRPNWhaamZMbUQrclNCT0VqVkE5djJIbENMRzlvNVJkSFFHckdMQWFqeXlVeTA3bkU3Y2JpUDFZM1oxcXpCQUFBIn0= -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["link_flair_css_class"],"name":[1],"type":["fctr"],"align":["left"]},{"label":["count"],"name":[2],"type":["int"],"align":["right"]},{"label":["avgScore"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"tagme","2":"137","3":"275.36496"},{"1":"shitpost","2":"6138","3":"186.81264"},{"1":"earnings","2":"21","3":"121.71429"},{"1":"yolo","2":"1004","3":"118.00299"},{"1":"satire","2":"195","3":"99.67179"},{"1":"energy","2":"62","3":"86.27419"},{"1":"biotech","2":"72","3":"69.20833"},{"1":"futures","2":"161","3":"64.17391"},{"1":"retail","2":"41","3":"63.07317"},{"1":"fundamentals","2":"838","3":"56.96539"},{"1":"profit","2":"119","3":"55.35294"},{"1":"","2":"40038","3":"51.55063"},{"1":"7a32c644-8394-11e8-87f6-0ee6340c53d4","2":"20","3":"50.35000"},{"1":"loss","2":"70","3":"44.88571"},{"1":"daily","2":"81","3":"43.65432"},{"1":"technicals","2":"367","3":"41.49864"},{"1":"options","2":"2327","3":"39.32015"},{"1":"stocks","2":"1696","3":"38.41215"},{"1":"question","2":"3387","3":"24.70682"},{"1":"dd","2":"597","3":"23.84590"},{"1":"industrials","2":"19","3":"19.31579"}],"options":{"columns":{"min":{},"max":[10],"total":[3]},"rows":{"min":[10],"max":[10],"total":[21]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>created_utc timestamp comes as a unix timestamp in seconds. Clearing this up. Making new column with EST timestamp.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucG9zdHMgPC0gcG9zdHMgJT4lIFxuICBtdXRhdGUoY3JlYXRlZF91dGNfY29udmVydGVkID0gbHVicmlkYXRlOjphc19kYXRldGltZShjcmVhdGVkX3V0YyksXG4gICAgICAgICBjcmVhdGVkX2RhdGVfdGltZV9VVEMgPSBsdWJyaWRhdGU6OmZvcmNlX3R6KGNyZWF0ZWRfdXRjX2NvbnZlcnRlZCwgdHpvbmUgPSBcIlVUQ1wiKSxcbiAgICAgICAgIGNyZWF0ZWRfZGF0ZV90aW1lX0VTVCA9IGx1YnJpZGF0ZTo6Zm9yY2VfdHpzKGNyZWF0ZWRfZGF0ZV90aW1lX1VUQywgdHpvbmVzID0gXCJVVENcIiwgdHpvbmVfb3V0ID0gXCJBbWVyaWNhL05ld19Zb3JrXCIpXG4gICAgICAgICApXG5gYGAifQ== -->
+<pre class="r"><code>posts &lt;- posts %&gt;% 
+  mutate(created_utc_converted = lubridate::as_datetime(created_utc),
+         created_date_time_UTC = lubridate::force_tz(created_utc_converted, tzone = &quot;UTC&quot;),
+         created_date_time_EST = lubridate::force_tzs(created_date_time_UTC, tzones = &quot;UTC&quot;, tzone_out = &quot;America/New_York&quot;)
+         )</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkdyYWJiaW5nIFJlZGRpdCBQb3N0cyINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQoNCmBgYHtyIHdhcm5pbmc9RkFMU0V9DQoNCmxpYnJhcnkodGlkeXZlcnNlKQ0KbGlicmFyeShiaWdRdWVyeVIpDQoNCmBgYA0KDQpgYGB7cn0NCiMjIHRoaXMgd2lsbCBvcGVuIHlvdXIgYnJvd3Nlcg0KIyMgQXV0aGVudGljYXRlIHdpdGggYW4gZW1haWwgdGhhdCBoYXMgYWNjZXNzIHRvIHRoZSBCaWdRdWVyeSBwcm9qZWN0IHlvdSBuZWVkDQpicXJfYXV0aCgpDQpgYGANCmBgYHtyfQ0KYnFyX3F1ZXJ5KCJiaWctcXVlcnktciIsInNhbXBsZXMiLA0KICAgICAgICAgICJTRUxFQ1QgQ09VTlQocmVwb3NpdG9yeS51cmwpIEZST00gW3B1YmxpY2RhdGE6c2FtcGxlcy5naXRodWJfbmVzdGVkXSIpDQoNCg0KU0VMRUNUICogRlJPTSBgZmgtYmlncXVlcnkucmVkZGl0X3Bvc3RzLjIwMThfMDVgIHdoZXJlIHN1YnJlZGRpdCA9ICd3YWxsc3RyZWV0YmV0cyc7DQpTRUxFQ1QgKiBGUk9NIFtmaC1iaWdxdWVyeTpyZWRkaXRfY29tbWVudHMuMjAxOF8wNV0gV0hFUkUgc3VicmVkZGl0ID0gJ3dhbGxzdHJlZXRiZXRzJw0KaHR0cHM6Ly9zMy5jb25zb2xlLmF3cy5hbWF6b24uY29tL3MzL2J1Y2tldHMvY3NlNjI0Mi1yZWRkaXQtZGF0YS8NCmBgYA0KDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkdyYWJiaW5nIFJlZGRpdCBQb3N0cyINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQoNCmBgYHtyIHdhcm5pbmc9RkFMU0V9DQoNCmxpYnJhcnkodGlkeXZlcnNlKQ0KbGlicmFyeSh0aWR5dGV4dCkNCg0KYGBgDQoNCkRhdGEgZnJvbSBiaWcgcXVlcnkgb2J0YWluZWQgd2l0aCB0aGlzOg0KU0VMRUNUICogRlJPTSBgZmgtYmlncXVlcnkucmVkZGl0X3Bvc3RzLjIwMThfMDVgIHdoZXJlIHN1YnJlZGRpdCA9ICd3YWxsc3RyZWV0YmV0cyc7DQpTRUxFQ1QgKiBGUk9NIFtmaC1iaWdxdWVyeTpyZWRkaXRfY29tbWVudHMuMjAxOF8wNV0gV0hFUkUgc3VicmVkZGl0ID0gJ3dhbGxzdHJlZXRiZXRzJw0KaHR0cHM6Ly9zMy5jb25zb2xlLmF3cy5hbWF6b24uY29tL3MzL2J1Y2tldHMvY3NlNjI0Mi1yZWRkaXQtZGF0YS8NCg0KDQpUaGlzIHdpbGwgY29tYmluZSBhbGwgdGhlIGNzdiBmaWxlcyBpbiB0aGUgZm9sZGVyIHN0cnVjdHVyZQ0KYGBge3J9DQpmaWxlX25hbWVzX2NvbW1lbnRzIDwtIGRpcignLi9jb21tZW50cy8nKSAjd2hlcmUgeW91IGhhdmUgeW91ciBmaWxlcw0KZmlsZV9uYW1lc19wb3N0cyA8LSBkaXIoJy4vcG9zdHMvJykgI3doZXJlIHlvdSBoYXZlIHlvdXIgZmlsZXMNCg0Kc2V0d2QoIkM6L1VzZXJzL0RhdmUvNjI0MlByb2plY3QvUmVkZGl0Q29tbWVudHMvY29tbWVudHMiKQ0KY29tbWVudHMgPC0gZG8uY2FsbChyYmluZCxsYXBwbHkoZmlsZV9uYW1lc19jb21tZW50cyxyZWFkLmNzdikpDQpzZXR3ZCgiQzovVXNlcnMvRGF2ZS82MjQyUHJvamVjdC9SZWRkaXRDb21tZW50cy9wb3N0cyIpDQpwb3N0cyA8LSBkby5jYWxsKHJiaW5kLGxhcHBseShmaWxlX25hbWVzX3Bvc3RzLHJlYWQuY3N2KSkNCmBgYA0KDQoNCg0KY29tbWVudHMgYW5kIHBvc3RzIGNhbiBiZSBqb2luZWQgb24gaWQgYXMgcHJpbWFyeSBrZXkgDQoNCkVhY2ggcG9zdCBoYXMgYSBjc3NfY2xhc3MgbmFtZSB3aGljaCBpcyBiYXNpY2FsbHkgYSB0YWcgZm9yIHRoZSB0eXBlIG9mIHBvc3QuIFdlIHNob3VsZCBvbmx5IGZvY3VzIG9uIHRoZSBnb29kIHRhZ3MuIFNvbWV0aGluZyBsaWtlICJzaGl0cG9zdCIgY29udGFpbnMgd2hhdCBpdCBzYXlzLCBzaGl0Lg0KDQpXZSBzaG91bGQgb25seSBsb29rIGF0IHBvc3RzIHdpdGggdGhlIGZvbGxvd2luZyB0YWdzOiBmdXR1cmVzLCBvcHRpb25zLCB5b2xvLCBlYXJuaW5ncywgbG9zcywgZnVuZGFtZW50YWxzLCBxdWVzdGlvbiwgc3RvY2tzLCB0ZWNobmljYWxzLCBkYWlseSwgZGQsIGFuZCBwcm9maXQuIA0KDQpVbmZvcnR1bmF0ZWx5IHRoZSBtYWpvcml0eSBvZiBwb3N0cyBhcmUgbm90IHRhZ2dlZCwgYW5kIHRoZXJlIGFwcGVhcnMgdG8gYmUgYSBoaWdoIGF2ZXJhZ2Ugc2NvcmUuIFRoaXMgbWF5IGluZGljYXRlIHRoYXQgdGFnZ2luZyBkaWQgbm90IHN0YXJ0IHVudGlsIHJlY2VudGx5LiANCmBgYHtyfQ0KDQojdGFnZ2VkIGNhdGVnb3JpZXMgb3JkZXJlZCBieSBhdmdzY29yZSBhbmQgY291bnQNCnBvc3RzICU+JSANCiAgZ3JvdXBfYnkobGlua19mbGFpcl9jc3NfY2xhc3MpICU+JSANCiAgc3VtbWFyaXplKGNvdW50ID0gbigpLA0KICAgICAgICAgICAgYXZnU2NvcmUgPSBtZWFuKHNjb3JlKQ0KICAgICAgICAgICAgKSAlPiUgDQogIGFycmFuZ2UoZGVzYyhhdmdTY29yZSxjb3VudCkpDQoNCmBgYA0KDQpjcmVhdGVkX3V0YyB0aW1lc3RhbXAgY29tZXMgYXMgYSB1bml4IHRpbWVzdGFtcCBpbiBzZWNvbmRzLiBDbGVhcmluZyB0aGlzIHVwLiBNYWtpbmcgbmV3IGNvbHVtbiB3aXRoIEVTVCB0aW1lc3RhbXAuIA0KYGBge3J9DQpwb3N0cyA8LSBwb3N0cyAlPiUgDQogIG11dGF0ZShjcmVhdGVkX3V0Y19jb252ZXJ0ZWQgPSBsdWJyaWRhdGU6OmFzX2RhdGV0aW1lKGNyZWF0ZWRfdXRjKSwNCiAgICAgICAgIGNyZWF0ZWRfZGF0ZV90aW1lX1VUQyA9IGx1YnJpZGF0ZTo6Zm9yY2VfdHooY3JlYXRlZF91dGNfY29udmVydGVkLCB0em9uZSA9ICJVVEMiKSwNCiAgICAgICAgIGNyZWF0ZWRfZGF0ZV90aW1lX0VTVCA9IGx1YnJpZGF0ZTo6Zm9yY2VfdHpzKGNyZWF0ZWRfZGF0ZV90aW1lX1VUQywgdHpvbmVzID0gIlVUQyIsIHR6b25lX291dCA9ICJBbWVyaWNhL05ld19Zb3JrIikNCiAgICAgICAgICkNCg0KY29tbWVudHMgPC0gY29tbWVudHMgJT4lIA0KICBtdXRhdGUoY3JlYXRlZF91dGNfY29udmVydGVkID0gbHVicmlkYXRlOjphc19kYXRldGltZShjcmVhdGVkX3V0YyksDQogICAgICAgICBjcmVhdGVkX2RhdGVfdGltZV9VVEMgPSBsdWJyaWRhdGU6OmZvcmNlX3R6KGNyZWF0ZWRfdXRjX2NvbnZlcnRlZCwgdHpvbmUgPSAiVVRDIiksDQogICAgICAgICBjcmVhdGVkX2RhdGVfdGltZV9FU1QgPSBsdWJyaWRhdGU6OmZvcmNlX3R6cyhjcmVhdGVkX2RhdGVfdGltZV9VVEMsIHR6b25lcyA9ICJVVEMiLCB0em9uZV9vdXQgPSAiQW1lcmljYS9OZXdfWW9yayIpDQogICAgICAgICApDQpgYGANCg0KDQpgYGB7cn0NCg0KYGBgDQoNCg0KDQo=</div>
 
 
 
