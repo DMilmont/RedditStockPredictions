@@ -1,0 +1,170 @@
+---
+title: "Reddit Posts Sentiment Analysis"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(tidytext)
+library(stringr)
+```
+
+```{r}
+stockSymbols <- stockSymbols %>% 
+  mutate(Symbol = tolower(Symbol))
+```
+
+```{r}
+
+
+postSymbol <- posts %>% 
+  select(title, link_id, created_date_time_EST) %>% 
+  mutate(title = as.character(title),
+         title = tolower(title),
+         title = str_replace_all(title,"[[:punct:]]", "")) %>% 
+  unnest_tokens(word,title) %>%
+  anti_join(stop_words) %>% 
+  semi_join(stockSymbols, by = c("word" = "Symbol"))
+
+```
+
+This obtains the most talked about stocks on wall street bets. 
+```{r}
+symbolCounts <- postSymbol %>% 
+  group_by(Date = as.Date(created_date_time_EST), word) %>% 
+  summarize(wordCount = n()) %>% 
+  filter(wordCount > 10)
+
+topSymbols <- unique(symbolCounts$word)
+```
+
+
+Plotting count of posts by stock ticker 
+```{r fig.height=10, fig.width=10, warning=FALSE}
+
+postSymbol %>% 
+  group_by(Date = as.Date(created_date_time_EST), word) %>% 
+  summarize(wordCount = n()) %>% 
+  filter(word %in% c("amd")) %>% 
+  ggplot(aes(x = Date, y = wordCount, group = word, color = word)) + geom_line(alpha = 1, size = 1) + theme(legend.position="none") + 
+  theme_minimal(base_size=15, base_family="Impact") +
+  labs(title="Symbol Frequency Over Time",
+       subtitle="",
+       x="Date",
+       y="Symbol Count",
+       caption=""
+  )  + 
+  theme(
+    plot.subtitle = element_text(color="#AAAAAA", size=10),
+    plot.title = element_text(family="Impact", size = 20),
+    plot.caption = element_text(color="#AAAAAA", size=18)
+  ) 
+
+
+```
+
+
+AMD posts and stock market volume - high correlation of 0.76
+```{r}
+amdposts <- postSymbol %>% 
+  group_by(Date = as.Date(created_date_time_EST), word) %>% 
+  summarize(wordCount = n()) %>% 
+  filter(word %in% c("amd")) %>% 
+  inner_join(amd, by=c("Date" = "Index")) 
+
+
+amdposts %>% 
+  ggplot(aes(Date,wordCount, color = "red")) + 
+  geom_line(alpha = 1, colour = 'red', size = 1) + 
+  scale_x_date(date_breaks = "1 month",date_labels = "%b") +
+  theme(legend.position="none") + 
+  theme_minimal(base_size=15, base_family="Impact") +
+  labs(title="Symbol Frequency Over Time",
+       subtitle="",
+       x="Date",
+       y="Symbol Count",
+       caption=""
+  )  + 
+  theme(
+    plot.subtitle = element_text(color="#AAAAAA", size=10),
+    plot.title = element_text(family="Impact", size = 20),
+    plot.caption = element_text(color="#AAAAAA", size=18)
+  ) 
+
+
+amdposts %>% 
+  ggplot(aes(Date,Volume, color = "red")) + 
+  geom_line(alpha = 1, colour = 'red', size = 1) + 
+  scale_x_date(date_breaks = "1 month",date_labels = "%b") +
+  theme(legend.position="none") + 
+  theme_minimal(base_size=15, base_family="Impact") +
+  labs(title="Symbol Stock Market Volume",
+       subtitle="",
+       x="Date",
+       y="Trading Volume",
+       caption=""
+  )  + 
+  theme(
+    plot.subtitle = element_text(color="#AAAAAA", size=10),
+    plot.title = element_text(family="Impact", size = 20),
+    plot.caption = element_text(color="#AAAAAA", size=18)
+  ) 
+```
+
+```{r}
+cor(amdposts$Volume,amdposts$wordCount)
+```
+
+Starting on the sentiment of comments for each post
+
+```{r}
+commentSentiment <- comments %>% 
+  select(link_id, created_date_time_EST, score, body) %>% 
+  mutate(body = as.character(body),
+         body = tolower(body),
+         body = str_replace_all(body,"[[:punct:]]", "")) %>% 
+  unnest_tokens(word,body) %>%
+  anti_join(stop_words)
+```
+
+
+```{r fig.height=8, fig.width=8}
+commentSentiment %>%
+  count(word) %>%
+  inner_join(get_sentiments("loughran"), by = "word") %>%
+  group_by(sentiment) %>%
+  top_n(5, n) %>%
+  ungroup() %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n)) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~ sentiment, scales = "free") +
+  ylab("Frequency of this word in wallstreetbets comments")
+```
+
+```{r}
+postsTopSymbols <- postSymbol %>% 
+  filter(word %in% topSymbols) %>% 
+  mutate(company = word)
+
+stock_sentiment_count <- commentSentiment %>%
+  inner_join(get_sentiments("loughran"), by = "word") %>%
+  inner_join(postsTopSymbols, by = "link_id") %>% 
+  count(sentiment, company) %>%
+  spread(sentiment, n, fill = 0)
+
+stock_sentiment_count
+```
+
+```{r}
+stock_sentiment_count %>%
+  mutate(score = (positive - negative) / (positive + negative)) %>%
+  mutate(company = reorder(company, score)) %>%
+  ggplot(aes(company, score, fill = score > 0)) +
+  geom_col(show.legend = FALSE) +
+  coord_flip() +
+  labs(x = "Company",
+       y = "Positivity score among WallStreetBets Comments")
+```
+

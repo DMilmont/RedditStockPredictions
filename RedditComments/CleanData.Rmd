@@ -29,8 +29,6 @@ posts <- do.call(rbind,lapply(file_names_posts,read.csv))
 
 
 
-comments and posts can be joined on id as primary key 
-
 Each post has a css_class name which is basically a tag for the type of post. We should only focus on the good tags. Something like "shitpost" contains what it says, shit.
 
 We should only look at posts with the following tags: futures, options, yolo, earnings, loss, fundamentals, question, stocks, technicals, daily, dd, and profit. 

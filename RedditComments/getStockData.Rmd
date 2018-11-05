@@ -1,0 +1,45 @@
+---
+title: "Stock Data"
+output: html_notebook
+---
+
+```{r}
+library(TTR)
+library(quantmod)
+library(tidyverse)
+
+
+```
+
+```{r}
+stockSymbols <- stockSymbols(exchange = c("AMEX", "NASDAQ", "NYSE"), sort.by = c("Exchange",
+"Symbol"), quiet = FALSE)
+```
+
+```{r}
+unique(stockSymbols$Industry)
+```
+
+```{r}
+#https://stackoverflow.com/questions/48207991/convert-xts-to-data-frame
+topSymbols
+dataEnv <- new.env()
+for(company in topSymbols){
+  try(getSymbols(company, auto.assign = TRUE, src="yahoo", from="2018-01-01", to="2018-09-30",return.class = 'zoo', env=dataEnv))
+  print(company)
+}
+
+plist <- eapply(dataEnv, Ad)
+ad.Stocks <- do.call(merge, plist) 
+
+Stockreturns <- data.frame(c(diff(ad.Stocks))) 
+fortify(Stockreturns)
+```
+
+```{r}
+
+amd <- getYahooData("amd", 20180101, 20180930)
+
+amd <- fortify(amd)
+```
+
