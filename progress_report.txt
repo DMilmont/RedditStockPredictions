@@ -4,7 +4,7 @@ hints
 1. Data collection:
     a. Reddit/big table data extracted in the form of CSV's and uploaded into AWS S3
         a.1 - Jan 2018 to Aug 2018 subreddits of "WallStreetBets" comments section
-    b. Stock Data from Alpha Vantage website (provides access to real time and historic data)
+    b. R quantmod package; Stock Data from Alpha Vantage website (provides access to real time and historic data)
         b.1 - This is an api from which data can be extracted in JSON and CSV format as desirable.
 
 2. NLP/Sentiment analysis of Reddit comments
