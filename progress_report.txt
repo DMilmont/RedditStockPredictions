@@ -16,6 +16,9 @@ hints
     a. With text analyzed data as features and BUY/SELL indicator as the response create ML model
     b. Predict effects of the text data (Reddit comments) on the amount of stock volatility
     c. Model Evaluation
+    
+    Multiple linear regression will be used to predict the stock prices. A model will be trained using historical data and used to predict future values. The results of the NLP analysis will be used as predictive variables in the regression model, along with other predictors which are not yet finalized. The assumptions of the regression model will include a linear relationhship between the predciting and response variables, little or no multicollinearity in predictors, residual error between predicted and observed responses follows a normal distribution, and homoscedasticity. The impact of the social sentiment variables can be measured with methods such as variable selection, finding p-values, confidence intervals, and estimated values for the coefficients. The regression model can be evaluated using statistical techniques such as finding the adjusted R-squared value and the root mean quared error.  If the model satisfies the assumptions of multiple linear regression, has acceptable adjusted R-squared and root mean squared error values, and the coefficients related to the social sentiment are found to be statistically significant, then the impact of the social sentiment variables can be measured by the value of the related estimated regression coefficients. 
+
 
 4. Creating API
     a. Loading data into a database for creating web based visualizations
