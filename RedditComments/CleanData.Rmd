@@ -95,6 +95,9 @@ Dropping unneeded columns
 posts <- posts %>% 
   select(-from_id,-from,-from_kind,-downs, -ups, -name, -saved,-created_utc,-created_utc_converted)
 ```
+```{r}
+
+```
 
 
 
@@ -124,6 +127,20 @@ daily_full <- posts %>%
 ```
 
 
+```{r}
+posts %>% 
+  filter(link_flair_css_class %in% c("earnings", "fundamentals", "daily")) %>% 
+  inner_join(comments, by = c("link_id")) %>% 
+  select(body, link_id) %>% 
+  filter(nchar(as.character(body)) >= 20) %>% 
+  mutate(body = str_replace_all(body,"[^A-Za-z0-9 ]", "")) %>% 
+  sample_n(1000) %>% 
+  write.csv(.,'1000comments.csv', row.names = FALSE) 
+  
+
+
+
+```
 
 
 

@@ -33,7 +33,7 @@ This obtains the most talked about stocks on wall street bets.
 symbolCounts <- postSymbol %>% 
   group_by(Date = as.Date(created_date_time_EST), word) %>% 
   summarize(wordCount = n()) %>% 
-  filter(wordCount > 10)
+  filter(wordCount > 3)
 
 topSymbols <- unique(symbolCounts$word)
 ```
@@ -126,6 +126,17 @@ commentSentiment <- comments %>%
   unnest_tokens(word,body) %>%
   anti_join(stop_words)
 ```
+
+Building list of positive and negative words based on loughrain lexicon to be used in python textblob naive bayes training. 
+```{r}
+
+commentSentiment %>% 
+  inner_join(get_sentiments("loughran"), by = "word") %>% 
+  filter(sentiment == "negative" | sentiment == "positive") 
+ 
+
+```
+
 
 
 ```{r fig.height=8, fig.width=8}
