@@ -11,9 +11,13 @@ library(stringr)
 
 ```{r}
 stockSymbols <- stockSymbols %>% 
-  mutate(Symbol = tolower(Symbol))
+  mutate(Symbol = tolower(Symbol)) %>% 
+  write.csv(.,'stockTickers.csv', row.names = FALSE) 
+  
 ```
 
+
+Datframe that has link_id and stock ticker mentioned 
 ```{r}
 
 
@@ -28,14 +32,45 @@ postSymbol <- posts %>%
 
 ```
 
+Finding only post link_id with one ticker in the post title - creating vector for filter purposes 
+```{r}
+
+distinctLinkPost <- postSymbol %>% 
+  group_by(link_id) %>% 
+  summarise(count = n()) %>% 
+  filter(count == 1) %>% 
+  select(link_id)
+
+```
+
+
+Create final dataframe of posts and comments filtered by posts with a single ticker in post title 
+```{r}
+
+FinalData <- posts %>%
+  semi_join(distinctLinkPost, by = c("link_id" = "link_id")) %>% 
+  inner_join(comments, by = c("link_id")) 
+
+FinalData <- FinalData %>% 
+  left_join(postSymbol) %>% 
+  rename(ticker = word)
+
+write.csv(FinalData, 'FinalData.csv', row.names = FALSE)
+
+
+```
+
+
 This obtains the most talked about stocks on wall street bets. 
 ```{r}
 symbolCounts <- postSymbol %>% 
   group_by(Date = as.Date(created_date_time_EST), word) %>% 
   summarize(wordCount = n()) %>% 
-  filter(wordCount > 3)
+  filter(wordCount > 5)
 
 topSymbols <- unique(symbolCounts$word)
+
+#write.csv(topSymbols,'WallStreetBetsTickers.csv',row.names = FALSE)
 ```
 
 

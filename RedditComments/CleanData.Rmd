@@ -133,7 +133,7 @@ posts %>%
   inner_join(comments, by = c("link_id")) %>% 
   select(body, link_id) %>% 
   filter(nchar(as.character(body)) >= 20) %>% 
-  mutate(body = str_replace_all(body,"[^A-Za-z0-9 ]", "")) %>% 
+  mutate(body = str_replace_all(body,"[[:punct:]]", "")) %>% 
   sample_n(1000) %>% 
   write.csv(.,'1000comments.csv', row.names = FALSE) 
   
@@ -142,6 +142,24 @@ posts %>%
 
 ```
 
+posts by day average
+```{r}
+posts %>% 
+  group_by(Date = as.Date(created_date_time_EST)) %>% 
+  summarize(count = n()) %>% 
+  summarize(mean(count))
+```
 
+comments per post average
+
+```{r}
+comments %>% 
+  group_by(link_id) %>% 
+  summarize(count = n()) %>% 
+  summarize(average = mean(count),
+            median_ = median(count),
+            minimum = min(count),
+            maximum = max(count))
+```
 
 
