@@ -11,8 +11,8 @@ library(stringr)
 
 ```{r}
 stockSymbols <- stockSymbols %>% 
-  mutate(Symbol = tolower(Symbol)) %>% 
-  write.csv(.,'stockTickers.csv', row.names = FALSE) 
+  mutate(Symbol = tolower(Symbol)) ##%>% 
+  ##write.csv(.,'stockTickers.csv', row.names = FALSE) 
   
 ```
 

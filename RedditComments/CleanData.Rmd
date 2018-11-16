@@ -86,7 +86,7 @@ Basic summary stats for posts
 The missmap indicates that from_id, from, from_king, downs, ups, name, saved should be dropped. After dropping columns missmap is nearly perfect 
 ```{r}
 summary(posts)
-missmap(posts)
+#missmap(posts)
 ```
 
 Dropping unneeded columns
@@ -106,7 +106,7 @@ Basic summary stats for comments
 The missmap indicates that ups, downs, name, score_hidden, archived should be dropped - after dropping columns missmap is perfect
 ```{r}
 summary(comments)
-missmap(comments)
+#missmap(comments)
 ```
 Dropping uneeded columns
 ups, downs, name, score_hidden, archived
@@ -134,8 +134,8 @@ posts %>%
   select(body, link_id) %>% 
   filter(nchar(as.character(body)) >= 20) %>% 
   mutate(body = str_replace_all(body,"[[:punct:]]", "")) %>% 
-  sample_n(1000) %>% 
-  write.csv(.,'1000comments.csv', row.names = FALSE) 
+  sample_n(1000) #%>% 
+  #write.csv(.,'1000comments.csv', row.names = FALSE) 
   
 
 

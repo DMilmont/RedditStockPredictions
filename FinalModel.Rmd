@@ -1,0 +1,28 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(readr)
+library(tidyverse)
+```
+
+```{r}
+#if you do not have FinalData.csv generated already you must use redditsentiment.rmd to generate it on your local machine. The individual post and comment csv files should be pullable from git and found within their respective folders. 
+
+#final dataset for reddit comment analysis 
+FinalData <- read_csv("RedditComments/FinalData.csv")
+#Stock tickers that are mentioned at least 5 times per day on wallstreetbets - generated in RedditSentiment.rmd
+WallStreetBetsTickers <- read_csv("RedditComments/WallStreetBetsTickers.csv")
+#stock data final format for analysis and suitable for joining to Final Reddit Data (FinalData)
+StockPricesFinal <- read_csv("RedditComments/StockPricesFinal.csv")
+#lower casing to match FinalData format 
+StockPricesFinal <- StockPricesFinal %>% mutate(stockTicker = tolower(stockTicker))
+```
+
+```{r}
+
+
+```
+

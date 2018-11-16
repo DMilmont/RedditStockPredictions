@@ -21,6 +21,7 @@ stockSymbols <- stockSymbols(exchange = c("AMEX", "NASDAQ", "NYSE"), sort.by = c
 unique(stockSymbols$Industry)
 ```
 
+Pulling all stock prices by day for specified period. Only pulling prices of the stock tickers used in topSymbols. 
 ```{r}
 #https://stackoverflow.com/questions/48207991/convert-xts-to-data-frame
 topSymbols
@@ -33,9 +34,56 @@ for(company in topSymbols){
 plist <- eapply(dataEnv, Ad)
 ad.Stocks <- do.call(merge, plist) 
 
+Stockreturns.pcnt
+
 Stockreturns <- data.frame(c(diff(ad.Stocks))) 
-fortify(Stockreturns)
+StockPrices <- fortify.zoo(ad.Stocks)
+Stockreturns.pcnt <- data.frame(c(diff(ad.Stocks)/ad.Stocks[-nrow(ad.Stocks),] )) 
+
+Stockreturns.pcnt <- round(Stockreturns.pcnt,3)
+
+
 ```
+
+
+Created final dataframe suitable for modeling in the long format and adds in lagged price changes. 
+```{r}
+StockPrices <- StockPrices %>% 
+  mutate(Date = Index,
+         Index = NULL) 
+
+StockPrices_Long <- StockPrices %>% 
+  gather(key,value, 1:94) %>% 
+  group_by(Date, key) %>% 
+  rename(stockTicker = key,
+         stockPrice = value
+  )
+
+StockPricesFinal <- StockPrices_Long %>% 
+  group_by(stockTicker) %>% 
+  mutate(
+    lag1 = lag(stockPrice),
+    lag2 = lag(stockPrice,2),
+    lag3 = lag(stockPrice,3),
+    lag7 = lag(stockPrice,7),
+    lag30 = lag(stockPrice,30),
+    lag90 = lag(stockPrice,90),
+    pct.change1 = round(((stockPrice - lag1) / lag1),3),
+    pct.change2 = round(((stockPrice - lag2) / lag2),3),
+    pct.change3 = round(((stockPrice - lag3) / lag3),3),
+    pct.change7 = round(((stockPrice - lag7) / lag7),3),
+    pct.change30 = round(((stockPrice - lag30) / lag30),3),
+    pct.change90 = round(((stockPrice - lag90) / lag90),3)
+  ) 
+  
+#write.csv(StockPricesFinal, "StockPricesFinal.csv")
+  
+  
+
+  
+```
+
+
 
 ```{r}
 
