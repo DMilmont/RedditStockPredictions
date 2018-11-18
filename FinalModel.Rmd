@@ -8,11 +8,12 @@ library(readr)
 library(tidyverse)
 ```
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 #if you do not have FinalData.csv generated already you must use redditsentiment.rmd to generate it on your local machine. The individual post and comment csv files should be pullable from git and found within their respective folders. 
 
 #final dataset for reddit comment analysis 
-FinalData <- read_csv("RedditComments/FinalData.csv")
+#FinalData <- read_csv("RedditComments/FinalData.csv")
+Data <- read_csv("FinalDataVaderSentiment.csv")
 #Stock tickers that are mentioned at least 5 times per day on wallstreetbets - generated in RedditSentiment.rmd
 WallStreetBetsTickers <- read_csv("RedditComments/WallStreetBetsTickers.csv")
 #stock data final format for analysis and suitable for joining to Final Reddit Data (FinalData)
@@ -21,8 +22,64 @@ StockPricesFinal <- read_csv("RedditComments/StockPricesFinal.csv")
 StockPricesFinal <- StockPricesFinal %>% mutate(stockTicker = tolower(stockTicker))
 ```
 
+Building dataframe for modeling 
 ```{r}
 
+ModelData <- Data %>% 
+  select(created_date_time_EST,compound,neg,pos,ticker) %>% 
+  group_by(ticker,Date = as.Date(created_date_time_EST)) %>% 
+  summarise(sumNeg = sum(neg),
+            sumPos = sum(pos),
+            sumCompound = sum(compound),
+            #ratioNeg = sum(neg)/sum(pos),
+            count = n()
+            ) %>% 
+  inner_join(StockPricesFinal, by = c("Date" = "Date", "ticker" = "stockTicker") ) %>% 
+  ungroup() %>% 
+  mutate(
+    ticker = as.factor(ticker)
+  )
 
 ```
+
+models
+```{r}
+mod1 <- lm(pct.change2 ~ ticker + sumNeg + sumPos + sumCompound + count, data = rfData, na.action = na.exclude)
+summary(mod1)
+
+plot(mod1)
+
+```
+
+```{r}
+rfData %>% 
+  ggplot(aes(x=Date,y=sumNeg))
+```
+
+
+```{r}
+ModelData %>% 
+  count(ticker) %>% 
+  arrange(desc(n))
+
+#select only popular tickers
+tickers <- c("mu","amd","tsla","snap","nvda","fb","amzn","baba","aapl","ge","msft","nflx")
+```
+
+```{r}
+library(randomForest)
+
+rfData <- ModelData %>% 
+  filter(ticker %in% tickers) %>% 
+  mutate(ticker = factor(ticker))
+
+unique(rfData$ticker)
+
+rf.mod <- randomForest(pct.change1 ~ ticker + sumNeg + sumPos + sumCompound + count, data = rfData, na.action = na.exclude, type = regression)
+
+summary(rf.mod)
+
+rf.mod$importance
+```
+
 

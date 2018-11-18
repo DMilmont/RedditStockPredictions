@@ -3,5 +3,8 @@
 .RData
 .Ruserdata
 bq.oauth
+.html
 
 FinalData.csv
+FinalDataVaderSentiment.csv
+RedditComments/FinalDataIbotta.csv
