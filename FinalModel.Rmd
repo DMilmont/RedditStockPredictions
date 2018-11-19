@@ -6,6 +6,8 @@ output: html_notebook
 ```{r}
 library(readr)
 library(tidyverse)
+
+options(scipen = 999)
 ```
 
 ```{r message=FALSE, warning=FALSE}
@@ -35,21 +37,46 @@ ModelData <- Data %>%
             count = n()
             ) %>% 
   inner_join(StockPricesFinal, by = c("Date" = "Date", "ticker" = "stockTicker") ) %>% 
-  ungroup() %>% 
+  ungroup() %>%
+  filter(ticker %in% tickers) %>% 
   mutate(
     ticker = as.factor(ticker)
   )
 
 ```
 
+train/test splits
+```{r}
+train <- ModelData %>% 
+  filter(Date < '2018-07-01')
+
+test <- ModelData %>% 
+  filter(Date >= '2018-07-01')
+```
+
+
 models
 ```{r}
-mod1 <- lm(pct.change2 ~ ticker + sumNeg + sumPos + sumCompound + count, data = rfData, na.action = na.exclude)
+mod1 <- lm(pct.change2 ~ ticker + sumNeg + sumPos + sumCompound + count, data = ModelData, na.action = na.exclude)
 summary(mod1)
 
 plot(mod1)
 
+test$pred <- predict(mod1,test)
+
+test$residuals <- test$pred - test$pct.change2
+
+
+
 ```
+
+Interaction term with volume and compound
+```{r}
+mod2 <- lm(pct.change2 ~ ticker + sumNeg * count, data = ModelData, na.action = na.exclude)
+summary(mod2)
+```
+
+
 
 ```{r}
 rfData %>% 
@@ -82,4 +109,13 @@ summary(rf.mod)
 rf.mod$importance
 ```
 
+
+```{r}
+ModelData %>% 
+  ggplot(aes(pct.change30)) + geom_histogram(binwidth = .01)
+```
+
+```{r}
+
+```
 
