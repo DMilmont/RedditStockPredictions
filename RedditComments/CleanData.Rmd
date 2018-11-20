@@ -12,7 +12,7 @@ Data from big query obtained with the following queries:
 SELECT * FROM `fh-bigquery.reddit_posts.2018_05` where subreddit = 'wallstreetbets';
 SELECT * FROM [fh-bigquery:reddit_comments.2018_05] WHERE subreddit = 'wallstreetbets'
 
-The purposes of this notebook is to walk through basic cleaning and EDA to produce a dataset for analysis. 
+The purpose of this notebook is to walk through basic cleaning and EDA to produce a dataset for analysis. 
 
 This will combine all the csv files in the folder structure - the csv files should be part of the git repository under RedditComments
 ```{r message=FALSE, warning=FALSE}
