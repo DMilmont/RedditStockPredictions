@@ -178,40 +178,15 @@ $(document).ready(function () {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShUVFIpXG5saWJyYXJ5KHF1YW50bW9kKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShUVFIpXG5saWJyYXJ5KHF1YW50bW9kKVxubGlicmFyeSh0aWR5dmVyc2UpXG5gYGAifQ== -->
 <pre class="r"><code>library(TTR)
-library(quantmod)</code></pre>
+library(quantmod)
+library(tidyverse)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiTG9hZGluZyByZXF1aXJlZCBwYWNrYWdlOiB4dHNcbkxvYWRpbmcgcmVxdWlyZWQgcGFja2FnZTogem9vXG5cbkF0dGFjaGluZyBwYWNrYWdlOiCRem9vklxuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIJFwYWNrYWdlOmJhc2WSOlxuXG4gICAgYXMuRGF0ZSwgYXMuRGF0ZS5udW1lcmljXG5cblZlcnNpb24gMC40LTAgaW5jbHVkZWQgbmV3IGRhdGEgZGVmYXVsdHMuIFNlZSA/Z2V0U3ltYm9scy5cbkxlYXJuIGZyb20gYSBxdWFudG1vZCBhdXRob3I6IGh0dHBzOi8vd3d3LmRhdGFjYW1wLmNvbS9jb3Vyc2VzL2ltcG9ydGluZy1hbmQtbWFuYWdpbmctZmluYW5jaWFsLWRhdGEtaW4tclxuIn0= -->
-<pre><code>Loading required package: xts
-Loading required package: zoo
-
-Attaching package: 㤼㸱zoo㤼㸲
-
-The following objects are masked from 㤼㸱package:base㤼㸲:
-
-    as.Date, as.Date.numeric
-
-Version 0.4-0 included new data defaults. See ?getSymbols.
-Learn from a quantmod author: https://www.datacamp.com/courses/importing-and-managing-financial-data-in-r</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5gYGAifQ== -->
-<pre class="r"><code>library(tidyverse)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXHUwMDFiWzM3bS0tIFx1MDAxYlsxbUF0dGFjaGluZyBwYWNrYWdlc1x1MDAxYlsyMm0gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tIHRpZHl2ZXJzZSAxLjIuMSAtLVx1MDAxYlszOW1cblx1MDAxYlszN21cdTAwMWJbMzJtdlx1MDAxYlszN20gXHUwMDFiWzM0bWdncGxvdDJcdTAwMWJbMzdtIDMuMS4wICAgICBcdTAwMWJbMzJtdlx1MDAxYlszN20gXHUwMDFiWzM0bXB1cnJyICBcdTAwMWJbMzdtIDAuMi41XG5cdTAwMWJbMzJtdlx1MDAxYlszN20gXHUwMDFiWzM0bXRpYmJsZSBcdTAwMWJbMzdtIDEuNC4yICAgICBcdTAwMWJbMzJtdlx1MDAxYlszN20gXHUwMDFiWzM0bWRwbHlyICBcdTAwMWJbMzdtIDAuNy43XG5cdTAwMWJbMzJtdlx1MDAxYlszN20gXHUwMDFiWzM0bXRpZHlyICBcdTAwMWJbMzdtIDAuOC4yICAgICBcdTAwMWJbMzJtdlx1MDAxYlszN20gXHUwMDFiWzM0bXN0cmluZ3JcdTAwMWJbMzdtIDEuMy4xXG5cdTAwMWJbMzJtdlx1MDAxYlszN20gXHUwMDFiWzM0bXJlYWRyICBcdTAwMWJbMzdtIDEuMS4xICAgICBcdTAwMWJbMzJtdlx1MDAxYlszN20gXHUwMDFiWzM0bWZvcmNhdHNcdTAwMWJbMzdtIDAuMy4wXHUwMDFiWzM5bVxuXHUwMDFiWzM3bS0tIFx1MDAxYlsxbUNvbmZsaWN0c1x1MDAxYlsyMm0gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tIHRpZHl2ZXJzZV9jb25mbGljdHMoKSAtLVxuXHUwMDFiWzMxbXhcdTAwMWJbMzdtIFx1MDAxYlszNG1kcGx5clx1MDAxYlszN206Olx1MDAxYlszMm1maWx0ZXIoKVx1MDAxYlszN20gbWFza3MgXHUwMDFiWzM0bXN0YXRzXHUwMDFiWzM3bTo6ZmlsdGVyKClcblx1MDAxYlszMW14XHUwMDFiWzM3bSBcdTAwMWJbMzRtZHBseXJcdTAwMWJbMzdtOjpcdTAwMWJbMzJtZmlyc3QoKVx1MDAxYlszN20gIG1hc2tzIFx1MDAxYlszNG14dHNcdTAwMWJbMzdtOjpmaXJzdCgpXG5cdTAwMWJbMzFteFx1MDAxYlszN20gXHUwMDFiWzM0bWRwbHlyXHUwMDFiWzM3bTo6XHUwMDFiWzMybWxhZygpXHUwMDFiWzM3bSAgICBtYXNrcyBcdTAwMWJbMzRtc3RhdHNcdTAwMWJbMzdtOjpsYWcoKVxuXHUwMDFiWzMxbXhcdTAwMWJbMzdtIFx1MDAxYlszNG1kcGx5clx1MDAxYlszN206Olx1MDAxYlszMm1sYXN0KClcdTAwMWJbMzdtICAgbWFza3MgXHUwMDFiWzM0bXh0c1x1MDAxYlszN206Omxhc3QoKVx1MDAxYlszOW1cbiJ9 -->
-<pre><code>[37m-- [1mAttaching packages[22m --------------------------------------- tidyverse 1.2.1 --[39m
-[37m[32mv[37m [34mggplot2[37m 3.1.0     [32mv[37m [34mpurrr  [37m 0.2.5
-[32mv[37m [34mtibble [37m 1.4.2     [32mv[37m [34mdplyr  [37m 0.7.7
-[32mv[37m [34mtidyr  [37m 0.8.2     [32mv[37m [34mstringr[37m 1.3.1
-[32mv[37m [34mreadr  [37m 1.1.1     [32mv[37m [34mforcats[37m 0.3.0[39m
-[37m-- [1mConflicts[22m ------------------------------------------ tidyverse_conflicts() --
-[31mx[37m [34mdplyr[37m::[32mfilter()[37m masks [34mstats[37m::filter()
-[31mx[37m [34mdplyr[37m::[32mfirst()[37m  masks [34mxts[37m::first()
-[31mx[37m [34mdplyr[37m::[32mlag()[37m    masks [34mstats[37m::lag()
-[31mx[37m [34mdplyr[37m::[32mlast()[37m   masks [34mxts[37m::last()[39m</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<p>This notebook will obtain all stock data. You must have run cleanData.rmd and RedditSentiment.Rmd first before moving onto this step.</p>
+<p>Obtaining stock market tickers</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RvY2tTeW1ib2xzIDwtIHN0b2NrU3ltYm9scyhleGNoYW5nZSA9IGMoXCJBTUVYXCIsIFwiTkFTREFRXCIsIFwiTllTRVwiKSwgc29ydC5ieSA9IGMoXCJFeGNoYW5nZVwiLFxuXCJTeW1ib2xcIiksIHF1aWV0ID0gRkFMU0UpXG5gYGAifQ== -->
@@ -223,60 +198,95 @@ Learn from a quantmod author: https://www.datacamp.com/courses/importing-and-man
 Fetching NASDAQ symbols...
 Fetching NYSE symbols...</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudW5pcXVlKHN0b2NrU3ltYm9scyRJbmR1c3RyeSlcbmBgYCJ9 -->
-<pre class="r"><code>unique(stockSymbols$Industry)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RvY2tTeW1ib2xzIDwtIHN0b2NrU3ltYm9scyAlPiUgXG4gIG11dGF0ZShTeW1ib2wgPSB0b2xvd2VyKFN5bWJvbCkpICMjJT4lIFxuICAjI3dyaXRlLmNzdiguLCdzdG9ja1RpY2tlcnMuY3N2Jywgcm93Lm5hbWVzID0gRkFMU0UpIFxuYGBgIn0= -->
+<pre class="r"><code>stockSymbols &lt;- stockSymbols %&gt;% 
+  mutate(Symbol = tolower(Symbol)) ##%&gt;% 
+  ##write.csv(.,'stockTickers.csv', row.names = FALSE) </code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>unique industries</p>
+<!-- rnb-text-end -->
 <!-- rnb-text-begin -->
 <p>Pulling all stock prices by day for specified period. Only pulling prices of the stock tickers used in topSymbols.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuU3RvY2tQcmljZXMgPC0gem9vLmZvcnRpZnkoYWQuU3RvY2tzKVxuXG5gYGAifQ== -->
-<pre class="r"><code>StockPrices &lt;- zoo.fortify(ad.Stocks)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2h0dHBzOi8vc3RhY2tvdmVyZmxvdy5jb20vcXVlc3Rpb25zLzQ4MjA3OTkxL2NvbnZlcnQteHRzLXRvLWRhdGEtZnJhbWVcbnRvcFN5bWJvbHNcbmRhdGFFbnYgPC0gbmV3LmVudigpXG5mb3IoY29tcGFueSBpbiB0b3BTeW1ib2xzKXtcbiAgdHJ5KGdldFN5bWJvbHMoY29tcGFueSwgYXV0by5hc3NpZ24gPSBUUlVFLCBzcmM9XCJ5YWhvb1wiLCBmcm9tPVwiMjAxOC0wMS0wMVwiLCB0bz1cIjIwMTgtMDktMzBcIixyZXR1cm4uY2xhc3MgPSAnem9vJywgZW52PWRhdGFFbnYpKVxuICBwcmludChjb21wYW55KVxufVxuXG5wbGlzdCA8LSBlYXBwbHkoZGF0YUVudiwgQWQpXG5hZC5TdG9ja3MgPC0gZG8uY2FsbChtZXJnZSwgcGxpc3QpIFxuXG5TdG9ja3JldHVybnMucGNudFxuXG5TdG9ja3JldHVybnMgPC0gZGF0YS5mcmFtZShjKGRpZmYoYWQuU3RvY2tzKSkpIFxuU3RvY2tQcmljZXMgPC0gZm9ydGlmeS56b28oYWQuU3RvY2tzKVxuU3RvY2tyZXR1cm5zLnBjbnQgPC0gZGF0YS5mcmFtZShjKGRpZmYoYWQuU3RvY2tzKS9hZC5TdG9ja3NbLW5yb3coYWQuU3RvY2tzKSxdICkpIFxuXG5TdG9ja3JldHVybnMucGNudCA8LSByb3VuZChTdG9ja3JldHVybnMucGNudCwzKVxuXG5cbmBgYCJ9 -->
+<pre class="r"><code>#https://stackoverflow.com/questions/48207991/convert-xts-to-data-frame
+topSymbols
+dataEnv &lt;- new.env()
+for(company in topSymbols){
+  try(getSymbols(company, auto.assign = TRUE, src=&quot;yahoo&quot;, from=&quot;2018-01-01&quot;, to=&quot;2018-09-30&quot;,return.class = 'zoo', env=dataEnv))
+  print(company)
+}
+
+plist &lt;- eapply(dataEnv, Ad)
+ad.Stocks &lt;- do.call(merge, plist) 
+
+Stockreturns.pcnt
+
+Stockreturns &lt;- data.frame(c(diff(ad.Stocks))) 
+StockPrices &lt;- fortify.zoo(ad.Stocks)
+Stockreturns.pcnt &lt;- data.frame(c(diff(ad.Stocks)/ad.Stocks[-nrow(ad.Stocks),] )) 
+
+Stockreturns.pcnt &lt;- round(Stockreturns.pcnt,3)
 </code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gem9vLmZvcnRpZnkoYWQuU3RvY2tzKSA6IGNvdWxkIG5vdCBmaW5kIGZ1bmN0aW9uIFwiem9vLmZvcnRpZnlcIlxuIn0= -->
-<pre><code>Error in zoo.fortify(ad.Stocks) : could not find function &quot;zoo.fortify&quot;</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Created final dataframe suitable for modeling in the long format and adds in lagged price changes.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIFN0b2NrUHJpY2VzX0xvbmcgJT4lIFxuICBtdXRhdGUoc3RvY2tUaWNrZXIgPSB0b2xvd2VyKHN0b2NrVGlja2VyKSkgXG5cbmBgYCJ9 -->
-<pre class="r"><code> StockPrices_Long %&gt;% 
-  mutate(stockTicker = tolower(stockTicker)) 
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuU3RvY2tQcmljZXMgPC0gU3RvY2tQcmljZXMgJT4lIFxuICBtdXRhdGUoRGF0ZSA9IEluZGV4LFxuICAgICAgICAgSW5kZXggPSBOVUxMKSBcblxuU3RvY2tQcmljZXNfTG9uZyA8LSBTdG9ja1ByaWNlcyAlPiUgXG4gIGdhdGhlcihrZXksdmFsdWUsIDE6OTQpICU+JSBcbiAgZ3JvdXBfYnkoRGF0ZSwga2V5KSAlPiUgXG4gIHJlbmFtZShzdG9ja1RpY2tlciA9IGtleSxcbiAgICAgICAgIHN0b2NrUHJpY2UgPSB2YWx1ZVxuICApXG5cblN0b2NrUHJpY2VzRmluYWwgPC0gU3RvY2tQcmljZXNfTG9uZyAlPiUgXG4gIGdyb3VwX2J5KHN0b2NrVGlja2VyKSAlPiUgXG4gIG11dGF0ZShcbiAgICBsYWcxID0gbGFnKHN0b2NrUHJpY2UpLFxuICAgIGxhZzIgPSBsYWcoc3RvY2tQcmljZSwyKSxcbiAgICBsYWczID0gbGFnKHN0b2NrUHJpY2UsMyksXG4gICAgbGFnNyA9IGxhZyhzdG9ja1ByaWNlLDcpLFxuICAgIGxhZzMwID0gbGFnKHN0b2NrUHJpY2UsMzApLFxuICAgIGxhZzkwID0gbGFnKHN0b2NrUHJpY2UsOTApLFxuICAgIHBjdC5jaGFuZ2UxID0gcm91bmQoKChzdG9ja1ByaWNlIC0gbGFnMSkgLyBsYWcxKSwzKSxcbiAgICBwY3QuY2hhbmdlMiA9IHJvdW5kKCgoc3RvY2tQcmljZSAtIGxhZzIpIC8gbGFnMiksMyksXG4gICAgcGN0LmNoYW5nZTMgPSByb3VuZCgoKHN0b2NrUHJpY2UgLSBsYWczKSAvIGxhZzMpLDMpLFxuICAgIHBjdC5jaGFuZ2U3ID0gcm91bmQoKChzdG9ja1ByaWNlIC0gbGFnNykgLyBsYWc3KSwzKSxcbiAgICBwY3QuY2hhbmdlMzAgPSByb3VuZCgoKHN0b2NrUHJpY2UgLSBsYWczMCkgLyBsYWczMCksMyksXG4gICAgcGN0LmNoYW5nZTkwID0gcm91bmQoKChzdG9ja1ByaWNlIC0gbGFnOTApIC8gbGFnOTApLDMpXG4gICkgXG4gIFxuI3dyaXRlLmNzdihTdG9ja1ByaWNlc0ZpbmFsLCBcIlN0b2NrUHJpY2VzRmluYWwuY3N2XCIpXG4gIFxuICBcblxuICBcbmBgYCJ9 -->
+<pre class="r"><code>StockPrices &lt;- StockPrices %&gt;% 
+  mutate(Date = Index,
+         Index = NULL) 
+
+StockPrices_Long &lt;- StockPrices %&gt;% 
+  gather(key,value, 1:94) %&gt;% 
+  group_by(Date, key) %&gt;% 
+  rename(stockTicker = key,
+         stockPrice = value
+  )
+
+StockPricesFinal &lt;- StockPrices_Long %&gt;% 
+  group_by(stockTicker) %&gt;% 
+  mutate(
+    lag1 = lag(stockPrice),
+    lag2 = lag(stockPrice,2),
+    lag3 = lag(stockPrice,3),
+    lag7 = lag(stockPrice,7),
+    lag30 = lag(stockPrice,30),
+    lag90 = lag(stockPrice,90),
+    pct.change1 = round(((stockPrice - lag1) / lag1),3),
+    pct.change2 = round(((stockPrice - lag2) / lag2),3),
+    pct.change3 = round(((stockPrice - lag3) / lag3),3),
+    pct.change7 = round(((stockPrice - lag7) / lag7),3),
+    pct.change30 = round(((stockPrice - lag30) / lag30),3),
+    pct.change90 = round(((stockPrice - lag90) / lag90),3)
+  ) 
+  
+#write.csv(StockPricesFinal, &quot;StockPricesFinal.csv&quot;)
+  
+  
+
+  </code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gbXV0YXRlX2ltcGwoLmRhdGEsIGRvdHMpIDogXG4gIENvbHVtbiBgc3RvY2tUaWNrZXJgIGNhbid0IGJlIG1vZGlmaWVkIGJlY2F1c2UgaXQncyBhIGdyb3VwaW5nIHZhcmlhYmxlXG4ifQ== -->
-<pre><code>Error in mutate_impl(.data, dots) : 
-  Column `stockTicker` can't be modified because it's a grouping variable</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYW1kIDwtIGdldFlhaG9vRGF0YShcImFtZFwiLCAyMDE4MDEwMSwgMjAxODA5MzApXG5cbmBgYCJ9 -->
-<pre class="r"><code>amd &lt;- getYahooData(&quot;amd&quot;, 20180101, 20180930)
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5hbWQgPC0gZ2V0WWFob29EYXRhKFwiYW1kXCIsIDIwMTgwMTAxLCAyMDE4MDkzMClcblxuYW1kIDwtIGZvcnRpZnkoYW1kKVxuYGBgIn0= -->
+<pre class="r"><code>
+amd &lt;- getYahooData(&quot;amd&quot;, 20180101, 20180930)
+
+amd &lt;- fortify(amd)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiVFRSOjpnZXRZYWhvb0RhdGEgaXMgZGVwcmVjYXRlZCBhbmQgd2lsbCBiZSByZW1vdmVkIGluIGEgZnV0dXJlIHJlbGVhc2UuXG5QbGVhc2UgdXNlIHF1YW50bW9kOjpnZXRTeW1ib2xzIGluc3RlYWQuXG4ifQ== -->
-<pre><code>TTR::getYahooData is deprecated and will be removed in a future release.
-Please use quantmod::getSymbols instead.</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gY3VybDo6Y3VybF9kb3dubG9hZCh1cmwsIGRlc3RmaWxlID0gdG1wLCBxdWlldCA9IHF1aWV0LCBoYW5kbGUgPSBoYW5kbGUkY2gpIDogXG4gIE9wZXJhdGlvbiB3YXMgYWJvcnRlZCBieSBhbiBhcHBsaWNhdGlvbiBjYWxsYmFja1xuIn0= -->
-<pre><code>Error in curl::curl_download(url, destfile = tmp, quiet = quiet, handle = handle$ch) : 
-  Operation was aborted by an application callback</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlN0b2NrIERhdGEiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpgYGB7cn0NCmxpYnJhcnkoVFRSKQ0KbGlicmFyeShxdWFudG1vZCkNCmxpYnJhcnkodGlkeXZlcnNlKQ0KDQoNCmBgYA0KDQpgYGB7cn0NCnN0b2NrU3ltYm9scyA8LSBzdG9ja1N5bWJvbHMoZXhjaGFuZ2UgPSBjKCJBTUVYIiwgIk5BU0RBUSIsICJOWVNFIiksIHNvcnQuYnkgPSBjKCJFeGNoYW5nZSIsDQoiU3ltYm9sIiksIHF1aWV0ID0gRkFMU0UpDQoNCmBgYA0KDQpgYGB7cn0NCnVuaXF1ZShzdG9ja1N5bWJvbHMkSW5kdXN0cnkpDQpgYGANCg0KUHVsbGluZyBhbGwgc3RvY2sgcHJpY2VzIGJ5IGRheSBmb3Igc3BlY2lmaWVkIHBlcmlvZC4gT25seSBwdWxsaW5nIHByaWNlcyBvZiB0aGUgc3RvY2sgdGlja2VycyB1c2VkIGluIHRvcFN5bWJvbHMuIA0KYGBge3J9DQojaHR0cHM6Ly9zdGFja292ZXJmbG93LmNvbS9xdWVzdGlvbnMvNDgyMDc5OTEvY29udmVydC14dHMtdG8tZGF0YS1mcmFtZQ0KdG9wU3ltYm9scw0KZGF0YUVudiA8LSBuZXcuZW52KCkNCmZvcihjb21wYW55IGluIHRvcFN5bWJvbHMpew0KICB0cnkoZ2V0U3ltYm9scyhjb21wYW55LCBhdXRvLmFzc2lnbiA9IFRSVUUsIHNyYz0ieWFob28iLCBmcm9tPSIyMDE4LTAxLTAxIiwgdG89IjIwMTgtMDktMzAiLHJldHVybi5jbGFzcyA9ICd6b28nLCBlbnY9ZGF0YUVudikpDQogIHByaW50KGNvbXBhbnkpDQp9DQoNCnBsaXN0IDwtIGVhcHBseShkYXRhRW52LCBBZCkNCmFkLlN0b2NrcyA8LSBkby5jYWxsKG1lcmdlLCBwbGlzdCkgDQoNClN0b2NrcmV0dXJucy5wY250DQoNClN0b2NrcmV0dXJucyA8LSBkYXRhLmZyYW1lKGMoZGlmZihhZC5TdG9ja3MpKSkgDQpTdG9ja1ByaWNlcyA8LSBmb3J0aWZ5LnpvbyhhZC5TdG9ja3MpDQpTdG9ja3JldHVybnMucGNudCA8LSBkYXRhLmZyYW1lKGMoZGlmZihhZC5TdG9ja3MpL2FkLlN0b2Nrc1stbnJvdyhhZC5TdG9ja3MpLF0gKSkgDQoNClN0b2NrcmV0dXJucy5wY250IDwtIHJvdW5kKFN0b2NrcmV0dXJucy5wY250LDMpDQoNCg0KYGBgDQoNCg0KQ3JlYXRlZCBmaW5hbCBkYXRhZnJhbWUgc3VpdGFibGUgZm9yIG1vZGVsaW5nIGluIHRoZSBsb25nIGZvcm1hdCBhbmQgYWRkcyBpbiBsYWdnZWQgcHJpY2UgY2hhbmdlcy4gDQpgYGB7cn0NClN0b2NrUHJpY2VzIDwtIFN0b2NrUHJpY2VzICU+JSANCiAgbXV0YXRlKERhdGUgPSBJbmRleCwNCiAgICAgICAgIEluZGV4ID0gTlVMTCkgDQoNClN0b2NrUHJpY2VzX0xvbmcgPC0gU3RvY2tQcmljZXMgJT4lIA0KICBnYXRoZXIoa2V5LHZhbHVlLCAxOjk0KSAlPiUgDQogIGdyb3VwX2J5KERhdGUsIGtleSkgJT4lIA0KICByZW5hbWUoc3RvY2tUaWNrZXIgPSBrZXksDQogICAgICAgICBzdG9ja1ByaWNlID0gdmFsdWUNCiAgKQ0KDQpTdG9ja1ByaWNlc0ZpbmFsIDwtIFN0b2NrUHJpY2VzX0xvbmcgJT4lIA0KICBncm91cF9ieShzdG9ja1RpY2tlcikgJT4lIA0KICBtdXRhdGUoDQogICAgbGFnMSA9IGxhZyhzdG9ja1ByaWNlKSwNCiAgICBsYWcyID0gbGFnKHN0b2NrUHJpY2UsMiksDQogICAgbGFnMyA9IGxhZyhzdG9ja1ByaWNlLDMpLA0KICAgIGxhZzcgPSBsYWcoc3RvY2tQcmljZSw3KSwNCiAgICBsYWczMCA9IGxhZyhzdG9ja1ByaWNlLDMwKSwNCiAgICBsYWc5MCA9IGxhZyhzdG9ja1ByaWNlLDkwKSwNCiAgICBwY3QuY2hhbmdlMSA9IHJvdW5kKCgoc3RvY2tQcmljZSAtIGxhZzEpIC8gbGFnMSksMyksDQogICAgcGN0LmNoYW5nZTIgPSByb3VuZCgoKHN0b2NrUHJpY2UgLSBsYWcyKSAvIGxhZzIpLDMpLA0KICAgIHBjdC5jaGFuZ2UzID0gcm91bmQoKChzdG9ja1ByaWNlIC0gbGFnMykgLyBsYWczKSwzKSwNCiAgICBwY3QuY2hhbmdlNyA9IHJvdW5kKCgoc3RvY2tQcmljZSAtIGxhZzcpIC8gbGFnNyksMyksDQogICAgcGN0LmNoYW5nZTMwID0gcm91bmQoKChzdG9ja1ByaWNlIC0gbGFnMzApIC8gbGFnMzApLDMpLA0KICAgIHBjdC5jaGFuZ2U5MCA9IHJvdW5kKCgoc3RvY2tQcmljZSAtIGxhZzkwKSAvIGxhZzkwKSwzKQ0KICApIA0KICANCiN3cml0ZS5jc3YoU3RvY2tQcmljZXNGaW5hbCwgIlN0b2NrUHJpY2VzRmluYWwuY3N2IikNCiAgDQogIA0KDQogIA0KYGBgDQoNCg0KDQpgYGB7cn0NCg0KYW1kIDwtIGdldFlhaG9vRGF0YSgiYW1kIiwgMjAxODAxMDEsIDIwMTgwOTMwKQ0KDQphbWQgPC0gZm9ydGlmeShhbWQpDQpgYGANCg0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlN0b2NrIERhdGEiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpgYGB7ciBtZXNzYWdlPUZBTFNFLCB3YXJuaW5nPUZBTFNFfQ0KbGlicmFyeShUVFIpDQpsaWJyYXJ5KHF1YW50bW9kKQ0KbGlicmFyeSh0aWR5dmVyc2UpDQpgYGANCg0KVGhpcyBub3RlYm9vayB3aWxsIG9idGFpbiBhbGwgc3RvY2sgZGF0YS4gWW91IG11c3QgaGF2ZSBydW4gY2xlYW5EYXRhLnJtZCBhbmQgUmVkZGl0U2VudGltZW50LlJtZCBmaXJzdCBiZWZvcmUgbW92aW5nIG9udG8gdGhpcyBzdGVwLiANCg0KDQpPYnRhaW5pbmcgc3RvY2sgbWFya2V0IHRpY2tlcnMNCmBgYHtyfQ0Kc3RvY2tTeW1ib2xzIDwtIHN0b2NrU3ltYm9scyhleGNoYW5nZSA9IGMoIkFNRVgiLCAiTkFTREFRIiwgIk5ZU0UiKSwgc29ydC5ieSA9IGMoIkV4Y2hhbmdlIiwNCiJTeW1ib2wiKSwgcXVpZXQgPSBGQUxTRSkNCg0Kc3RvY2tTeW1ib2xzIDwtIHN0b2NrU3ltYm9scyAlPiUgDQogIG11dGF0ZShTeW1ib2wgPSB0b2xvd2VyKFN5bWJvbCkpICMjJT4lIA0KICAjI3dyaXRlLmNzdiguLCdzdG9ja1RpY2tlcnMuY3N2Jywgcm93Lm5hbWVzID0gRkFMU0UpIA0KYGBgDQoNCnVuaXF1ZSBpbmR1c3RyaWVzIA0KYGBge3IgZXZhbD1GQUxTRSwgaW5jbHVkZT1GQUxTRX0NCnVuaXF1ZShzdG9ja1N5bWJvbHMkSW5kdXN0cnkpDQpgYGANCg0KUHVsbGluZyBhbGwgc3RvY2sgcHJpY2VzIGJ5IGRheSBmb3Igc3BlY2lmaWVkIHBlcmlvZC4gT25seSBwdWxsaW5nIHByaWNlcyBvZiB0aGUgc3RvY2sgdGlja2VycyB1c2VkIGluIHRvcFN5bWJvbHMuIA0KYGBge3J9DQojaHR0cHM6Ly9zdGFja292ZXJmbG93LmNvbS9xdWVzdGlvbnMvNDgyMDc5OTEvY29udmVydC14dHMtdG8tZGF0YS1mcmFtZQ0KdG9wU3ltYm9scw0KZGF0YUVudiA8LSBuZXcuZW52KCkNCmZvcihjb21wYW55IGluIHRvcFN5bWJvbHMpew0KICB0cnkoZ2V0U3ltYm9scyhjb21wYW55LCBhdXRvLmFzc2lnbiA9IFRSVUUsIHNyYz0ieWFob28iLCBmcm9tPSIyMDE4LTAxLTAxIiwgdG89IjIwMTgtMDktMzAiLHJldHVybi5jbGFzcyA9ICd6b28nLCBlbnY9ZGF0YUVudikpDQogIHByaW50KGNvbXBhbnkpDQp9DQoNCnBsaXN0IDwtIGVhcHBseShkYXRhRW52LCBBZCkNCmFkLlN0b2NrcyA8LSBkby5jYWxsKG1lcmdlLCBwbGlzdCkgDQoNClN0b2NrcmV0dXJucy5wY250DQoNClN0b2NrcmV0dXJucyA8LSBkYXRhLmZyYW1lKGMoZGlmZihhZC5TdG9ja3MpKSkgDQpTdG9ja1ByaWNlcyA8LSBmb3J0aWZ5LnpvbyhhZC5TdG9ja3MpDQpTdG9ja3JldHVybnMucGNudCA8LSBkYXRhLmZyYW1lKGMoZGlmZihhZC5TdG9ja3MpL2FkLlN0b2Nrc1stbnJvdyhhZC5TdG9ja3MpLF0gKSkgDQoNClN0b2NrcmV0dXJucy5wY250IDwtIHJvdW5kKFN0b2NrcmV0dXJucy5wY250LDMpDQoNCg0KYGBgDQoNCg0KQ3JlYXRlZCBmaW5hbCBkYXRhZnJhbWUgc3VpdGFibGUgZm9yIG1vZGVsaW5nIGluIHRoZSBsb25nIGZvcm1hdCBhbmQgYWRkcyBpbiBsYWdnZWQgcHJpY2UgY2hhbmdlcy4gDQpgYGB7cn0NClN0b2NrUHJpY2VzIDwtIFN0b2NrUHJpY2VzICU+JSANCiAgbXV0YXRlKERhdGUgPSBJbmRleCwNCiAgICAgICAgIEluZGV4ID0gTlVMTCkgDQoNClN0b2NrUHJpY2VzX0xvbmcgPC0gU3RvY2tQcmljZXMgJT4lIA0KICBnYXRoZXIoa2V5LHZhbHVlLCAxOjk0KSAlPiUgDQogIGdyb3VwX2J5KERhdGUsIGtleSkgJT4lIA0KICByZW5hbWUoc3RvY2tUaWNrZXIgPSBrZXksDQogICAgICAgICBzdG9ja1ByaWNlID0gdmFsdWUNCiAgKQ0KDQpTdG9ja1ByaWNlc0ZpbmFsIDwtIFN0b2NrUHJpY2VzX0xvbmcgJT4lIA0KICBncm91cF9ieShzdG9ja1RpY2tlcikgJT4lIA0KICBtdXRhdGUoDQogICAgbGFnMSA9IGxhZyhzdG9ja1ByaWNlKSwNCiAgICBsYWcyID0gbGFnKHN0b2NrUHJpY2UsMiksDQogICAgbGFnMyA9IGxhZyhzdG9ja1ByaWNlLDMpLA0KICAgIGxhZzcgPSBsYWcoc3RvY2tQcmljZSw3KSwNCiAgICBsYWczMCA9IGxhZyhzdG9ja1ByaWNlLDMwKSwNCiAgICBsYWc5MCA9IGxhZyhzdG9ja1ByaWNlLDkwKSwNCiAgICBwY3QuY2hhbmdlMSA9IHJvdW5kKCgoc3RvY2tQcmljZSAtIGxhZzEpIC8gbGFnMSksMyksDQogICAgcGN0LmNoYW5nZTIgPSByb3VuZCgoKHN0b2NrUHJpY2UgLSBsYWcyKSAvIGxhZzIpLDMpLA0KICAgIHBjdC5jaGFuZ2UzID0gcm91bmQoKChzdG9ja1ByaWNlIC0gbGFnMykgLyBsYWczKSwzKSwNCiAgICBwY3QuY2hhbmdlNyA9IHJvdW5kKCgoc3RvY2tQcmljZSAtIGxhZzcpIC8gbGFnNyksMyksDQogICAgcGN0LmNoYW5nZTMwID0gcm91bmQoKChzdG9ja1ByaWNlIC0gbGFnMzApIC8gbGFnMzApLDMpLA0KICAgIHBjdC5jaGFuZ2U5MCA9IHJvdW5kKCgoc3RvY2tQcmljZSAtIGxhZzkwKSAvIGxhZzkwKSwzKQ0KICApIA0KICANCiN3cml0ZS5jc3YoU3RvY2tQcmljZXNGaW5hbCwgIlN0b2NrUHJpY2VzRmluYWwuY3N2IikNCiAgDQogIA0KDQogIA0KYGBgDQoNCg0KDQpgYGB7cn0NCg0KYW1kIDwtIGdldFlhaG9vRGF0YSgiYW1kIiwgMjAxODAxMDEsIDIwMTgwOTMwKQ0KDQphbWQgPC0gZm9ydGlmeShhbWQpDQpgYGANCg0K</div>
 
 
 

@@ -3,21 +3,27 @@ title: "Stock Data"
 output: html_notebook
 ---
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 library(TTR)
 library(quantmod)
 library(tidyverse)
-
-
 ```
 
+This notebook will obtain all stock data. You must have run cleanData.rmd and RedditSentiment.Rmd first before moving onto this step. 
+
+
+Obtaining stock market tickers
 ```{r}
 stockSymbols <- stockSymbols(exchange = c("AMEX", "NASDAQ", "NYSE"), sort.by = c("Exchange",
 "Symbol"), quiet = FALSE)
 
+stockSymbols <- stockSymbols %>% 
+  mutate(Symbol = tolower(Symbol)) ##%>% 
+  ##write.csv(.,'stockTickers.csv', row.names = FALSE) 
 ```
 
-```{r}
+unique industries 
+```{r eval=FALSE, include=FALSE}
 unique(stockSymbols$Industry)
 ```
 
