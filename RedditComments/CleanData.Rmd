@@ -15,6 +15,7 @@ SELECT * FROM [fh-bigquery:reddit_comments.2018_05] WHERE subreddit = 'wallstree
 The purpose of this notebook is to walk through basic cleaning and EDA to produce a dataset for analysis. 
 
 This will combine all the csv files in the folder structure - the csv files should be part of the git repository under RedditComments
+
 ```{r message=FALSE, warning=FALSE}
 file_names_comments <- dir('./comments/') #where you have your files
 file_names_posts <- dir('./posts/') #where you have your files
