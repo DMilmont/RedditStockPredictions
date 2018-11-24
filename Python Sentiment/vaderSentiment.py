@@ -12,3 +12,5 @@ FinalDataVaderSentiment = data.join(sentiment)
 
 FinalDataVaderSentiment.to_csv('FinalDataVaderSentiment.csv')
 
+
+
