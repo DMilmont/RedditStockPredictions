@@ -69,18 +69,63 @@ test$residuals <- test$pred - test$pct.change2
 
 
 ```
+
+
+Step with pcnt change 2
 ```{r}
-mod1 <- lm(pct.change2 ~ ticker + sumNeg + sumPos + sumCompound + count, data = ModelData, na.action = na.exclude)
-summary(mod1)
+fullmodel <- lm(pct.change2 ~ ticker + sumNeg + sumPos + sumCompound + constraining + litigious + negative + positive + superfluous + uncertainty + count, data = na.omit(ModelData), na.action =  na.exclude)
+stepResults <- step(fullmodel, direction = "backward", trace=FALSE ) 
+
+stepResults
+```
+
+Determining stepwise model pcnt change 2 
+```{r}
+BestStepWiseModel <- lm(pct.change2 ~ ticker + sumCompound + litigious + 
+    negative + uncertainty + count, data = na.omit(ModelData), 
+    na.action = na.exclude)
+
+summary(BestStepWiseModel)
+
+plot(BestStepWiseModel)
+```
+
+backward selection with pct change 1 
+```{r}
+fullmodel1 <- lm(pct.change1 ~ ticker + sumNeg + sumPos + sumCompound + constraining + litigious + negative + positive + superfluous + uncertainty + count, data = na.omit(ModelData), na.action =  na.exclude)
+stepResults1 <- step(fullmodel1, direction = "backward", trace=FALSE ) 
+
+stepResults1
+```
+
+Determining stepwise model pcnt change 1
+```{r}
+BestStepWiseModel1 <- lm(formula = pct.change1 ~ ticker + sumNeg + litigious + negative + 
+    positive + count, data = na.omit(ModelData), na.action = na.exclude)
+
+summary(BestStepWiseModel1)
+
+plot(BestStepWiseModel1)
 ```
 
 
+backward selection with pct change 3
 ```{r}
-modL <- lm(pct.change90 ~ ticker + constraining + negative + positive + count + negative * count, data = ModelData, na.action = na.exclude)
-summary(modL)
+fullmodel3 <- lm(pct.change3 ~ ticker + sumNeg + sumPos + sumCompound + constraining + litigious + negative + positive + superfluous + uncertainty + count, data = na.omit(ModelData), na.action =  na.exclude)
+stepResults3 <- step(fullmodel1, direction = "backward", trace=FALSE ) 
+
+stepResults3
 ```
 
+Determining stepwise model pcnt change 3
+```{r}
+BestStepWiseModel3 <- lm(formula = pct.change1 ~ ticker + sumNeg + litigious + negative + 
+    positive + count, data = na.omit(ModelData), na.action = na.exclude)
 
+summary(BestStepWiseModel3)
+
+plot(BestStepWiseModel3)
+```
 
 
 Interaction term with volume and compound
