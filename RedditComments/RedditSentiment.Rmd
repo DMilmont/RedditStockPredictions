@@ -44,7 +44,7 @@ distinctLinkPost <- postSymbol %>%
 
 
 Create final dataframe of posts and comments filtered by posts with a single ticker in post title - this will also create a csv file as needed. 
-```{r}
+```{r message=FALSE, warning=FALSE}
 
 FinalData <- posts %>%
   semi_join(distinctLinkPost, by = c("link_id" = "link_id")) %>% 
@@ -55,6 +55,8 @@ FinalData <- FinalData %>%
   rename(ticker = word)
 
 #write.csv(FinalData, 'FinalData.csv', row.names = FALSE)
+
+unique(FinalData$ticker)
 ```
 
 FinalData characteristics - amount of comments in posts with single mention of stock ticker. 
@@ -75,7 +77,7 @@ We are most interested in stocks that are frequently talked about. This obtains 
 symbolCounts <- postSymbol %>% 
   group_by(Date = as.Date(created_date_time_EST), word) %>% 
   summarize(wordCount = n()) %>% 
-  filter(wordCount > 5)
+  filter(wordCount > 1)
 
 topSymbols <- unique(symbolCounts$word)
 
@@ -84,7 +86,7 @@ topSymbols <- unique(symbolCounts$word)
 
 
 Plotting count of posts by stock ticker - using manually selected stock tickers that are most talked about on wallstreetbets 
-```{r fig.height=10, fig.width=10, warning=FALSE}
+```{r fig.height=20, fig.width=10, warning=FALSE}
 
 tickers <- c("mu","amd","tsla","snap","nvda","fb","amzn","baba","aapl","ge","msft","nflx")
 
@@ -178,7 +180,7 @@ commentSentiment <- comments %>%
 
 
 Building list of positive and negative words based on loughrain lexicon
-```{r}
+```{r message=FALSE, warning=FALSE}
 
 commentSentiment %>% 
   inner_join(get_sentiments("loughran"), by = "word") %>% 
@@ -220,7 +222,7 @@ stock_sentiment_count <- commentSentiment %>%
 #write.csv(stock_sentiment_count, "stock_sentiment_count.csv")
 ```
 
-Need to convert loughran to long https://stackoverflow.com/questions/43413322/how-to-convert-rows-into-columns-using-dplyr
+Creating loughrain sentiment 
 ```{r}
 loughranSentiment <- commentSentiment %>%
   inner_join(get_sentiments("loughran"), by = "word") %>% 
@@ -232,40 +234,46 @@ loughranSentiment <- loughranSentiment %>%
   summarize(scoreTotal = sum(score)) %>% 
   ungroup() 
 
-
-loughranSentiment %>% 
-  select(-word) %>% 
-  group_by(sentiment) %>% 
-  mutate(i = row_number()) %>% 
-  spread(sentiment,score) %>% 
-  select(-i)
-  
-
-select(-V1) %>% 
-   group_by(V2) %>%
-   dplyr::mutate(i1 = row_number()) %>% 
-   spread(V2, V3) %>%
-   select(-i1)
+loughranSentiment <- loughranSentiment %>%
+  spread(sentiment,scoreTotal) %>% 
+  group_by(link_id) 
 
 loughranSentiment <- loughranSentiment %>% 
-  gather(key,value,-score,-sentiment) %>% 
-  group_by(sentiment) %>% 
-  select(value,sentiment,score)
+  replace(is.na(.), 0)
 
-loughranSentiment %>% 
-  spread(sentiment,score)
+# loughranSentiment <- loughranSentiment %>%
+#   group_by(sentiment) %>%
+#   mutate(i = row_number()) %>%
+#   spread(sentiment,scoreTotal) %>%
+#   select(-i)
+# 
+# loughranSentiment %>% 
+#   group_by(link_id) %>% 
+#   summarize()
   
-  
-  group_by(link_id,sentiment) %>% 
-  summarize(score = sum(score)) %>% 
-  
-  
-StockPrices_Long <- StockPrices %>% 
-  gather(key,value, 1:94) %>% 
-  group_by(Date, key) %>% 
-  rename(stockTicker = key,
-         stockPrice = value
-  )  
+
+# select(-V1) %>% 
+#    group_by(V2) %>%
+#    dplyr::mutate(i1 = row_number()) %>% 
+#    spread(V2, V3) %>%
+#    select(-i1)
+# 
+# loughranSentiment <- loughranSentiment %>% 
+#   gather(key,value,-score,-sentiment) %>% 
+#   group_by(sentiment) %>% 
+#   select(value,sentiment,score)
+# 
+# loughranSentiment %>%
+#   spread(sentiment,scoreTotal) %>% 
+#   group_by(link_id) 
+#   
+#   
+# StockPrices_Long <- StockPrices %>% 
+#   gather(key,value, 1:94) %>% 
+#   group_by(Date, key) %>% 
+#   rename(stockTicker = key,
+#          stockPrice = value
+#  )  
 ```
 
 
@@ -279,5 +287,38 @@ stock_sentiment_count %>%
   coord_flip() +
   labs(x = "Ticker",
        y = "Positivity score among WallStreetBets Comments")
+```
+
+
+
+```{r}
+posts %>% 
+  group_by(as.Date(created_date_time_EST)) %>% 
+  summarise(postsPerDay = n()) %>% 
+  summarise(meanPostsPerDay = mean(postsPerDay))
+```
+
+```{r}
+comments %>% 
+  group_by(link_id) %>% 
+  summarise(commentsPerLink = n()) %>% 
+  summarise(meanCommentsPerPost = mean(commentsPerLink))
+```
+Obtaining stats on post comments 
+```{r}
+# postCommentsStats <- comments %>% 
+#   select(body, link_id, created_date_time_EST) %>% 
+#   mutate(body = as.character(body),
+#          body = tolower(body),
+#          body = str_replace_all(body,"[[:punct:]]", "")) %>% 
+#   unnest_tokens(word,body)
+```
+
+```{r}
+# postCommentsStats %>% 
+#   group_by(link_id) %>% 
+#   summarise(wordsPerComment = n()) %>% 
+#   summarise(meanWordsPerPost = mean(wordsPerComment))
+
 ```
 

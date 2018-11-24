@@ -24,12 +24,11 @@ StockPricesFinal <- read_csv("RedditComments/StockPricesFinal.csv")
 StockPricesFinal <- StockPricesFinal %>% mutate(stockTicker = tolower(stockTicker))
 ```
 
-Building dataframe for modeling 
+Add Loughrain Sentiment and vader sentiment for final dataframe to be used in modeling 
 ```{r}
-
 ModelData <- Data %>% 
-  select(created_date_time_EST,compound,neg,pos,ticker) %>% 
-  group_by(ticker,Date = as.Date(created_date_time_EST)) %>% 
+  select(created_date_time_EST,compound,neg,pos,ticker, link_id) %>% 
+  group_by(link_id,ticker,Date = as.Date(created_date_time_EST)) %>% 
   summarise(sumNeg = sum(neg),
             sumPos = sum(pos),
             sumCompound = sum(compound),
@@ -37,12 +36,13 @@ ModelData <- Data %>%
             count = n()
             ) %>% 
   inner_join(StockPricesFinal, by = c("Date" = "Date", "ticker" = "stockTicker") ) %>% 
+  inner_join(loughranSentiment, by = c("link_id" = "link_id") ) %>% 
+  select(-link_id) %>% 
   ungroup() %>%
   filter(ticker %in% tickers) %>% 
   mutate(
     ticker = as.factor(ticker)
   )
-
 ```
 
 train/test splits
@@ -57,7 +57,7 @@ test <- ModelData %>%
 
 models
 ```{r}
-mod1 <- lm(pct.change2 ~ ticker + sumNeg + sumPos + sumCompound + count, data = ModelData, na.action = na.exclude)
+mod1 <- lm(pct.change2 ~ ticker + sumNeg + sumPos + sumCompound + constraining + litigious + negative + positive + superfluous + uncertainty + count, data = ModelData, na.action = na.exclude)
 summary(mod1)
 
 plot(mod1)
@@ -69,6 +69,19 @@ test$residuals <- test$pred - test$pct.change2
 
 
 ```
+```{r}
+mod1 <- lm(pct.change2 ~ ticker + sumNeg + sumPos + sumCompound + count, data = ModelData, na.action = na.exclude)
+summary(mod1)
+```
+
+
+```{r}
+modL <- lm(pct.change90 ~ ticker + constraining + negative + positive + count + negative * count, data = ModelData, na.action = na.exclude)
+summary(modL)
+```
+
+
+
 
 Interaction term with volume and compound
 ```{r}

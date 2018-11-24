@@ -40,7 +40,6 @@ for(company in topSymbols){
 plist <- eapply(dataEnv, Ad)
 ad.Stocks <- do.call(merge, plist) 
 
-Stockreturns.pcnt
 
 Stockreturns <- data.frame(c(diff(ad.Stocks))) 
 StockPrices <- fortify.zoo(ad.Stocks)
@@ -90,11 +89,4 @@ StockPricesFinal <- StockPrices_Long %>%
 ```
 
 
-
-```{r}
-
-amd <- getYahooData("amd", 20180101, 20180930)
-
-amd <- fortify(amd)
-```
 
