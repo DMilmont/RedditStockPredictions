@@ -11,3 +11,4 @@ sentiment = data['body'].apply(lambda body: pd.Series(analyzer.polarity_scores(b
 FinalDataVaderSentiment = data.join(sentiment)
 
 FinalDataVaderSentiment.to_csv('FinalDataVaderSentiment.csv')
+
