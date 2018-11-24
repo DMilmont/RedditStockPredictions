@@ -8,3 +8,8 @@ bq.oauth
 FinalData.csv
 FinalDataVaderSentiment.csv
 RedditComments/FinalDataIbotta.csv
+.vscode/settings.json
+example.png
+Poster.pptx
+Python Sentiment/__pycache__/vaderSentiment.cpython-36.pyc
+RedditComments/FinalDataTableau.xlsx

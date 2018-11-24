@@ -5,7 +5,7 @@ output: html_notebook
 
 ```{r warning=FALSE}
 library(tidyverse)
-library(Amelia)
+#library(Amelia)
 ```
 
 Data from big query obtained with the following queries:
