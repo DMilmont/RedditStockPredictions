@@ -1,0 +1,211 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(readr)
+library(tidyverse)
+library(dplyr)
+
+library(ggplot2)
+library(doBy)
+library(DAAG)
+library(caret)
+library(glmnet)
+
+options(scipen = 999)
+```
+
+```{r message=FALSE, warning=FALSE}
+#if you do not have FinalData.csv generated already you must use redditsentiment.rmd to generate it on your local machine. The individual post and comment csv files should be pullable from git and found within their respective folders. 
+
+#final dataset for reddit comment analysis 
+#FinalData <- read_csv("RedditComments/FinalData.csv")
+Data <- read_csv("FinalDataVaderSentiment.csv")
+#Stock tickers that are mentioned at least 5 times per day on wallstreetbets - generated in RedditSentiment.rmd
+WallStreetBetsTickers <- read_csv("RedditComments/WallStreetBetsTickers.csv")
+#stock data final format for analysis and suitable for joining to Final Reddit Data (FinalData)
+StockPricesFinal <- read_csv("RedditComments/StockPricesFinal.csv")
+#lower casing to match FinalData format 
+StockPricesFinal <- StockPricesFinal %>% mutate(stockTicker = tolower(stockTicker))
+```
+
+Building dataframe for modeling 
+```{r}
+ModelData <- Data %>% 
+  select(created_date_time_EST,compound,neg,pos,ticker, link_id) %>% 
+  group_by(link_id,ticker,Date = as.Date(created_date_time_EST)) %>% 
+  summarise(sumNeg = sum(neg),
+            sumPos = sum(pos),
+            sumCompound = sum(compound),
+            #ratioNeg = sum(neg)/sum(pos),
+            count = n()
+            ) %>% 
+  inner_join(StockPricesFinal, by = c("Date" = "Date", "ticker" = "stockTicker") ) %>% 
+  inner_join(loughranSentiment, by = c("link_id" = "link_id") ) %>% 
+  select(-link_id) %>% 
+  ungroup() %>%
+  filter(ticker %in% tickers) %>% 
+  mutate(
+    ticker = as.factor(ticker)
+  )
+```
+
+Split data by ticker
+```{r}
+split_data <- split(ModelData, ModelData$ticker) #use subet() with for loop?
+#split_data$aapl
+```
+
+train/test splits
+```{r}
+## 75% of the sample size
+smp_size <- floor(0.75 * nrow(split_data$aapl))
+
+## set the seed
+set.seed(1)
+train_ind <- sample(seq_len(nrow(split_data$aapl)), size = smp_size)
+
+aapl_full <- subset(ModelData, ticker == "aapl")
+aapl_train <- split_data$aapl[train_ind, ]
+aapl_test <- split_data$aapl[-train_ind, ]
+```
+
+model with all variables
+```{r}
+all.data = ModelData[,-c(1,3,8)]
+model.all = lm(stockPrice ~ ., data = all.data, na.action = na.exclude)
+
+summary(model.all)
+
+
+```
+
+```{r}
+ctrl <- trainControl(method = "repeatedcv", number = 5, repeats = 5)
+
+lmFit_Step <- train(stockPrice ~ ., data = all.data, na.action = na.exclude, method = "lmStepAIC",
+                    scope = list(lower = stockPrice~1, upper = stockPrice~.),
+                    direction = "backward", trControl=ctrl)
+
+```
+
+```{r}
+sent.data.cols = c("ticker","sumNeg","sumPos","sumCompound","count","constraining","litigious","negative",
+              "positive","superfluous","uncertainty","stockPrice")
+
+sent.data = all.data[,sent.data.cols]
+
+```
+
+
+
+
+
+```{r}
+lmFit_Step$finalModel
+```
+
+
+
+```{r}
+mod_Step <- lm(stockPrice ~ ticker+positive+uncertainty,
+              na.action = na.exclude, data = all.data)
+summary(mod_Step)
+```
+
+
+```{r}
+ctrl2 <- trainControl(method = "repeatedcv", number = 5, repeats = 5)
+
+lmFit_Step2 <- train(stockPrice ~ ., data = sent.data, na.action = na.exclude, method = "lmStepAIC",
+                    scope = list(lower = stockPrice~1, upper = stockPrice~.),
+                    direction = "backward", trControl=ctrl2)
+```
+
+```{r}
+lmFit_Step2$finalModel
+```
+```{r}
+mod_Step2 <- lm(stockPrice ~ ticker+sumNeg + sumPos + sumCompound + negative + positive,
+              na.action = na.exclude, data = all.data)
+summary(mod_Step2)
+```
+
+
+
+
+
+Dave's code - keeping tickers
+```{r}
+ModelData %>% 
+  count(ticker) %>% 
+  arrange(desc(n))
+
+#select only popular tickers
+tickers <- c("mu","amd","tsla","snap","nvda","fb","amzn","baba","aapl","ge","msft","nflx")
+```
+
+
+Confidence Interval (95%)
+```{r}
+conf = confint(mod_Step, level = 0.95)
+conf
+```
+```{r}
+4/nrow(all.data)
+```
+
+
+```{r}
+ 
+cook = cooks.distance(mod_Step)
+cook[cook>(4/nrow(all.data))] #4/nrow(aapl_full) = 0.04819277
+plot(cook)
+
+```
+
+
+```{r}
+predicted_vals = predict.lm(mod_Step, type = "response")
+```
+
+
+```{r}
+library("car")
+res = mod_Step2$residuals
+fits = mod_Step2$fitted.values
+#res
+
+```
+
+
+### Linearity
+```{r}
+par(mfrow=c(2,1))
+plot(all.data$uncertainty, res, xlab="uncertainty",ylab="Residuals")
+plot(all.data$positive, res, xlab="positive",ylab="Residuals")
+
+
+```
+
+
+### Constant Variance & Independence
+
+```{r}
+plot(fits, res, xlab="Fitted Values",ylab="Residuals")
+```
+
+
+### Normality
+```{r}
+qqPlot(res, ylab="Residuals")
+```
+
+```{r}
+hist(res, xlab="Residuals", main = "",nclass=10,col="orange")
+```
+
+
+
