@@ -14,7 +14,7 @@ This notebook will obtain all stock data. You must have run cleanData.rmd first 
 Stock tickers from TTR package - if you do not have this csv you can run the obtaining stock market tickers code chunk in getStockData.rmd
 ```{r}
 library(readr)
-stockSymbols <- read_csv("C:/Users/Dave/6242Project/RedditComments/stockTickers.csv")
+stockSymbols <- read_csv("./stockTickers.csv")
 ```
 
 
@@ -56,7 +56,7 @@ FinalData <- FinalData %>%
 
 #write.csv(FinalData, 'FinalData.csv', row.names = FALSE)
 
-unique(FinalData$ticker)
+#unique(FinalData$ticker)
 ```
 
 FinalData characteristics - amount of comments in posts with single mention of stock ticker. 
@@ -72,7 +72,7 @@ nrow(FinalData)
 ```
 
 
-We are most interested in stocks that are frequently talked about. This obtains the most talked about stocks on wall street bets. This produces 95 distinct stock tickers. 
+We are most interested in stocks that are frequently talked about. This obtains the most talked about stocks on wall street bets. 
 ```{r}
 symbolCounts <- postSymbol %>% 
   group_by(Date = as.Date(created_date_time_EST), word) %>% 
@@ -84,11 +84,20 @@ topSymbols <- unique(symbolCounts$word)
 #write.csv(topSymbols,'WallStreetBetsTickers.csv',row.names = FALSE)
 ```
 
+WallStreetBets seems to only talk about specific stock tickers. A count of each ticker shows it is heavily skewed towards tech stocks. We chose stock tickers with a count > 50 and manually filtered our tickers that seemed to also be a common word. Examples of which might be cash, love, beat, play. All of these are valid tickers, but are also commonly used in post titles. 
+```{r}
+symbolCounts %>% 
+  group_by(word) %>% 
+  count() %>% 
+  arrange(desc(n))
+
+#manually created list of stocks we are focusing on
+tickers <- c("mu","amd","tsla","snap","nvda","fb","amzn","baba","aapl","ge","msft","nflx")
+```
+
 
 Plotting count of posts by stock ticker - using manually selected stock tickers that are most talked about on wallstreetbets 
 ```{r fig.height=20, fig.width=10, warning=FALSE}
-
-tickers <- c("mu","amd","tsla","snap","nvda","fb","amzn","baba","aapl","ge","msft","nflx")
 
 postSymbol %>% 
   group_by(Date = as.Date(created_date_time_EST), ticker = word) %>% 
@@ -118,56 +127,56 @@ postSymbol %>%
 
 AMD posts and stock market volume - high correlation of 0.76 - this only works is single ticker stock data is pulled. 
 ```{r eval=FALSE, include=FALSE}
-amdposts <- postSymbol %>% 
-  group_by(Date = as.Date(created_date_time_EST), word) %>% 
-  summarize(wordCount = n()) %>% 
-  filter(word %in% c("amd")) %>% 
-  inner_join(amd, by=c("Date" = "Index")) 
-
-
-amdposts %>% 
-  ggplot(aes(Date,wordCount, color = "red")) + 
-  geom_line(alpha = 1, colour = 'red', size = 1) + 
-  scale_x_date(date_breaks = "1 month",date_labels = "%b") +
-  theme(legend.position="none") + 
-  theme_minimal(base_size=15, base_family="Impact") +
-  labs(title="Symbol Frequency Over Time",
-       subtitle="",
-       x="Date",
-       y="Symbol Count",
-       caption=""
-  )  + 
-  theme(
-    plot.subtitle = element_text(color="#AAAAAA", size=10),
-    plot.title = element_text(family="Impact", size = 20),
-    plot.caption = element_text(color="#AAAAAA", size=18)
-  ) 
-
-
-amdposts %>% 
-  ggplot(aes(Date,Volume, color = "red")) + 
-  geom_line(alpha = 1, colour = 'red', size = 1) + 
-  scale_x_date(date_breaks = "1 month",date_labels = "%b") +
-  theme(legend.position="none") + 
-  theme_minimal(base_size=15, base_family="Impact") +
-  labs(title="Symbol Stock Market Volume",
-       subtitle="",
-       x="Date",
-       y="Trading Volume",
-       caption=""
-  )  + 
-  theme(
-    plot.subtitle = element_text(color="#AAAAAA", size=10),
-    plot.title = element_text(family="Impact", size = 20),
-    plot.caption = element_text(color="#AAAAAA", size=18)
-  ) 
+# amdposts <- postSymbol %>% 
+#   group_by(Date = as.Date(created_date_time_EST), word) %>% 
+#   summarize(wordCount = n()) %>% 
+#   filter(word %in% c("amd")) %>% 
+#   inner_join(amd, by=c("Date" = "Index")) 
+# 
+# 
+# amdposts %>% 
+#   ggplot(aes(Date,wordCount, color = "red")) + 
+#   geom_line(alpha = 1, colour = 'red', size = 1) + 
+#   scale_x_date(date_breaks = "1 month",date_labels = "%b") +
+#   theme(legend.position="none") + 
+#   theme_minimal(base_size=15, base_family="Impact") +
+#   labs(title="Symbol Frequency Over Time",
+#        subtitle="",
+#        x="Date",
+#        y="Symbol Count",
+#        caption=""
+#   )  + 
+#   theme(
+#     plot.subtitle = element_text(color="#AAAAAA", size=10),
+#     plot.title = element_text(family="Impact", size = 20),
+#     plot.caption = element_text(color="#AAAAAA", size=18)
+#   ) 
+# 
+# 
+# amdposts %>% 
+#   ggplot(aes(Date,Volume, color = "red")) + 
+#   geom_line(alpha = 1, colour = 'red', size = 1) + 
+#   scale_x_date(date_breaks = "1 month",date_labels = "%b") +
+#   theme(legend.position="none") + 
+#   theme_minimal(base_size=15, base_family="Impact") +
+#   labs(title="Symbol Stock Market Volume",
+#        subtitle="",
+#        x="Date",
+#        y="Trading Volume",
+#        caption=""
+#   )  + 
+#   theme(
+#     plot.subtitle = element_text(color="#AAAAAA", size=10),
+#     plot.title = element_text(family="Impact", size = 20),
+#     plot.caption = element_text(color="#AAAAAA", size=18)
+#   ) 
 ```
 
 ```{r eval=FALSE, include=FALSE}
-cor(amdposts$Volume,amdposts$wordCount)
+# cor(amdposts$Volume,amdposts$wordCount)
 ```
 
-Starting on the sentiment of comments for each post - this is the first method we tried. 
+Starting on the sentiment of comments for each post - this is the first method we tried using the Loughrain sentiment lexicon - a finance specific lexicon
 ```{r}
 commentSentiment <- comments %>% 
   select(link_id, created_date_time_EST, score, body) %>% 
@@ -180,7 +189,7 @@ commentSentiment <- comments %>%
 
 
 Building list of positive and negative words based on loughrain lexicon
-```{r message=FALSE, warning=FALSE}
+```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 
 commentSentiment %>% 
   inner_join(get_sentiments("loughran"), by = "word") %>% 
@@ -222,7 +231,7 @@ stock_sentiment_count <- commentSentiment %>%
 #write.csv(stock_sentiment_count, "stock_sentiment_count.csv")
 ```
 
-Creating loughrain sentiment 
+Creating loughrain sentiment and transforming dataframe to long format suitable for modeling
 ```{r}
 loughranSentiment <- commentSentiment %>%
   inner_join(get_sentiments("loughran"), by = "word") %>% 
@@ -241,39 +250,6 @@ loughranSentiment <- loughranSentiment %>%
 loughranSentiment <- loughranSentiment %>% 
   replace(is.na(.), 0)
 
-# loughranSentiment <- loughranSentiment %>%
-#   group_by(sentiment) %>%
-#   mutate(i = row_number()) %>%
-#   spread(sentiment,scoreTotal) %>%
-#   select(-i)
-# 
-# loughranSentiment %>% 
-#   group_by(link_id) %>% 
-#   summarize()
-  
-
-# select(-V1) %>% 
-#    group_by(V2) %>%
-#    dplyr::mutate(i1 = row_number()) %>% 
-#    spread(V2, V3) %>%
-#    select(-i1)
-# 
-# loughranSentiment <- loughranSentiment %>% 
-#   gather(key,value,-score,-sentiment) %>% 
-#   group_by(sentiment) %>% 
-#   select(value,sentiment,score)
-# 
-# loughranSentiment %>%
-#   spread(sentiment,scoreTotal) %>% 
-#   group_by(link_id) 
-#   
-#   
-# StockPrices_Long <- StockPrices %>% 
-#   gather(key,value, 1:94) %>% 
-#   group_by(Date, key) %>% 
-#   rename(stockTicker = key,
-#          stockPrice = value
-#  )  
 ```
 
 
@@ -304,7 +280,9 @@ comments %>%
   summarise(commentsPerLink = n()) %>% 
   summarise(meanCommentsPerPost = mean(commentsPerLink))
 ```
-Obtaining stats on post comments 
+
+
+Obtaining stats on post comments - long running so commenting out for now 
 ```{r}
 # postCommentsStats <- comments %>% 
 #   select(body, link_id, created_date_time_EST) %>% 

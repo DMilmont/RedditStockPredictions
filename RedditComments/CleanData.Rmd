@@ -103,10 +103,6 @@ Dropping unneeded columns
 posts <- posts %>% 
   select(-from_id,-from,-from_kind,-downs, -ups, -name, -saved,-created_utc,-created_utc_converted)
 ```
-```{r}
-
-```
-
 
 
 
@@ -123,7 +119,6 @@ ups, downs, name, score_hidden, archived
 comments <- comments %>% 
   select(-ups,-downs,-name,-score_hidden, -archived, -created_utc,-created_utc_converted)
 ```
-
 
 
 Example of joining comments and posts and filtering by css class - this is not used in the final analysis 
@@ -166,5 +161,6 @@ comments %>%
             minimum = min(count),
             maximum = max(count))
 ```
+
 
 

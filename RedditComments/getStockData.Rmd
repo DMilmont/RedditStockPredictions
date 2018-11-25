@@ -22,17 +22,20 @@ stockSymbols <- stockSymbols %>%
   ##write.csv(.,'stockTickers.csv', row.names = FALSE) 
 ```
 
-unique industries 
+unique industries - just for reference
 ```{r eval=FALSE, include=FALSE}
 unique(stockSymbols$Industry)
 ```
 
-Pulling all stock prices by day for specified period. Only pulling prices of the stock tickers used in topSymbols. 
+Pulling all stock prices by day for specified period. Only pulling prices of the stock tickers used in tickers 
 ```{r}
 #https://stackoverflow.com/questions/48207991/convert-xts-to-data-frame
-topSymbols
+
+#manually created list of stocks we are focusing on
+tickers <- c("mu","amd","tsla","snap","nvda","fb","amzn","baba","aapl","ge","msft","nflx")
+
 dataEnv <- new.env()
-for(company in topSymbols){
+for(company in tickers){
   try(getSymbols(company, auto.assign = TRUE, src="yahoo", from="2018-01-01", to="2018-09-30",return.class = 'zoo', env=dataEnv))
   print(company)
 }
@@ -51,14 +54,14 @@ Stockreturns.pcnt <- round(Stockreturns.pcnt,3)
 ```
 
 
-Created final dataframe suitable for modeling in the long format and adds in lagged price changes. 
+Creating final dataframe suitable for modeling in the long format and adds in lagged price changes. 
 ```{r}
 StockPrices <- StockPrices %>% 
   mutate(Date = Index,
          Index = NULL) 
 
 StockPrices_Long <- StockPrices %>% 
-  gather(key,value, 1:94) %>% 
+  gather(key,value, 1:(length(StockPrices)-1)) %>% 
   group_by(Date, key) %>% 
   rename(stockTicker = key,
          stockPrice = value
@@ -81,7 +84,7 @@ StockPricesFinal <- StockPrices_Long %>%
     pct.change90 = round(((stockPrice - lag90) / lag90),3)
   ) 
   
-#write.csv(StockPricesFinal, "StockPricesFinal.csv")
+write.csv(StockPricesFinal, "StockPricesFinal.csv")
   
   
 
