@@ -2,13 +2,15 @@ from bottle import route, run, template, request, response
 from pymongo import MongoClient
 import pandas as pd
 import json
+import os
 
 # connection to mongodb
-mongoClient = MongoClient('localhost', 27017)
+# mongoClient = MongoClient('localhost', 27017)
+mongoClient = MongoClient(os.environ["DVA_FINAL_MONGODB_URL"])
 db = mongoClient.liztd
 c_submissions = db.reddit_submissions
 c_comments = db.reddit_comments
-c_reddit_sentiments = db.reddit_sentiments
+c_reddit_sentiments = db.sentiments
 
 
 # the decorator
