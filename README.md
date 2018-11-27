@@ -2,6 +2,7 @@
 Denver project for cse 6242
 
 MongoDB Cluster:
+
 Scripts:
 1) Export comments collection (before sentiment was calcuated)
 	mongoexport --db liztd -c comments --out comments.csv --type csv --fields "author_flair_css_class,distinguished,ups,subreddit,body,score_hidden,archived,name,author,author_flair_text,downs,created_utc,subreddit_id,link_id,parent_id,score,retrieved_on,controversiality,gilded,id"
