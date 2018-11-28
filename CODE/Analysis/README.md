@@ -1,7 +1,7 @@
 
-#Textual Analysis of Reddit.com/WallStreetBets to Predict Future Stock Returns
+# Textual Analysis of Reddit.com/WallStreetBets to Predict Future Stock Returns
 
-##Steps:
+## Steps:
 Run the Following files in order
 
 1. CleanData.rmd
