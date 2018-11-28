@@ -1,0 +1,366 @@
+---
+title: "Reddit Posts Sentiment Analysis"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(tidytext)
+library(stringr)
+```
+
+This notebook will obtain all stock data. You must have run cleanData.rmd first before moving onto this step. 
+
+Stock tickers from TTR package - if you do not have this csv you can run the obtaining stock market tickers code chunk in getStockData.rmd
+```{r}
+library(readr)
+stockSymbols <- read_csv("./stockTickers.csv")
+```
+
+
+Datframe that has link_id and stock ticker mentioned - this will strip and clean post titles and find posts that mention a stock ticker. Not all findings correspond to an actual stock ticker. For example the word play is used frequently in post titles when a user says something like: "What do you think of this stock play?" The user is actually referring to some specific stock move, not the company "play". This is motivation as to why we decided to manually create a subset of stock tickers that appear frequently in posts. 
+```{r}
+postSymbol <- posts %>% 
+  select(title, link_id, created_date_time_EST) %>% 
+  mutate(title = as.character(title),
+         title = tolower(title),
+         title = str_replace_all(title,"[[:punct:]]", "")) %>% 
+  unnest_tokens(word,title) %>%
+  anti_join(stop_words) %>% 
+  semi_join(stockSymbols, by = c("word" = "Symbol"))
+
+```
+
+Finding only post link_id with one ticker in the post title - creating vector for filter purposes 
+```{r}
+
+distinctLinkPost <- postSymbol %>% 
+  group_by(link_id) %>% 
+  summarise(count = n()) %>% 
+  filter(count == 1) %>% 
+  select(link_id)
+
+```
+
+
+Create final dataframe of posts and comments filtered by posts with a single ticker in post title - this will also create a csv file as needed. 
+```{r message=FALSE, warning=FALSE}
+
+FinalData <- posts %>%
+  semi_join(distinctLinkPost, by = c("link_id" = "link_id")) %>% 
+  inner_join(comments, by = c("link_id")) 
+
+FinalData <- FinalData %>% 
+  left_join(postSymbol) %>% 
+  rename(ticker = word)
+
+#write.csv(FinalData, 'FinalData.csv', row.names = FALSE)
+
+#unique(FinalData$ticker)
+```
+
+FinalData characteristics - amount of comments in posts with single mention of stock ticker. 
+54 x 308319
+
+Posts with single mention of stock ticker:
+20091
+```{r}
+length(FinalData)
+nrow(FinalData)
+
+
+```
+
+
+We are most interested in stocks that are frequently talked about. This obtains the most talked about stocks on wall street bets. 
+```{r}
+symbolCounts <- postSymbol %>% 
+  group_by(Date = as.Date(created_date_time_EST), word) %>% 
+  summarize(wordCount = n()) %>% 
+  filter(wordCount > 1)
+
+topSymbols <- unique(symbolCounts$word)
+
+#write.csv(topSymbols,'WallStreetBetsTickers.csv',row.names = FALSE)
+```
+
+WallStreetBets seems to only talk about specific stock tickers. A count of each ticker shows it is heavily skewed towards tech stocks. We chose stock tickers with a count > 50 and manually filtered our tickers that seemed to also be a common word. Examples of which might be cash, love, beat, play. All of these are valid tickers, but are also commonly used in post titles. 
+```{r}
+removeBadSymbols <- c(
+  "rh",
+  "call",
+"plot",
+"post",
+"fds",
+"run",
+"low",
+"beat",
+"life",
+"play",
+"cash",
+"live",
+"hope",
+"win",
+"ceo",
+"gold",
+"fund",
+"mod",
+"job",
+"save",
+"hear",
+"true",
+"dis",
+"plan",
+"baby",
+"car",
+"pm",
+"home",
+"ath",
+"cars",
+"eat",
+"fast",
+"rev",
+"team",
+"cat",
+"club",
+"loan",
+"mind",
+"race",
+"exp",
+"jobs",
+"blue",
+"bro",
+"info",
+"kids",
+"link",
+"bid",
+"roll",
+"fat",
+"riot",
+"site",
+"rare",
+"meet",
+"aa",
+"air",
+"edge",
+"love",
+"ago"
+)
+
+
+SymCount <- symbolCounts %>% 
+  filter(!word %in% removeBadSymbols) %>% 
+  group_by(word) %>% 
+  summarize(wordCount = n()) %>% 
+  mutate(ratio = wordCount/sum(wordCount)) %>% 
+  arrange(desc(wordCount))
+
+#manually created list of stocks we are focusing on
+tickers <- c("mu","amd","tsla","snap","nvda","fb","amzn","baba","aapl","ge","msft","nflx")
+```
+
+
+Plotting count of posts by stock ticker - using manually selected stock tickers that are most talked about on wallstreetbets 
+```{r fig.height=20, fig.width=10, warning=FALSE}
+
+postSymbol %>% 
+  group_by(Date = as.Date(created_date_time_EST), ticker = word) %>% 
+  summarize(wordCount = n()) %>% 
+  filter(ticker %in% tickers) %>% 
+  ggplot(aes(x = Date, y = wordCount, group = ticker, color = ticker)) + 
+  geom_line(alpha = 1, size = 1) + 
+  scale_x_date(date_breaks = "1 month",date_labels = "%b") +
+  facet_wrap(~ ticker, ncol = 2, scales = "free_y") +
+  theme(legend.position="none") + 
+  theme_minimal(base_size=15, base_family="Impact") +
+  labs(title="Ticker Posts by Day",
+       subtitle="Post counts with single ticker in title on r/wallstreetbets by day",
+       x="Date (2018)",
+       y="Post Count",
+       caption=""
+  )  + 
+  theme(
+    plot.subtitle = element_text(color="#AAAAAA", size=10),
+    plot.title = element_text(family="Impact", size = 20),
+    plot.caption = element_text(color="#AAAAAA", size=18)
+  ) 
+
+
+```
+
+
+AMD posts and stock market volume - high correlation of 0.76 - this only works is single ticker stock data is pulled. 
+```{r eval=FALSE, include=FALSE}
+# amdposts <- postSymbol %>% 
+#   group_by(Date = as.Date(created_date_time_EST), word) %>% 
+#   summarize(wordCount = n()) %>% 
+#   filter(word %in% c("amd")) %>% 
+#   inner_join(amd, by=c("Date" = "Index")) 
+# 
+# 
+# amdposts %>% 
+#   ggplot(aes(Date,wordCount, color = "red")) + 
+#   geom_line(alpha = 1, colour = 'red', size = 1) + 
+#   scale_x_date(date_breaks = "1 month",date_labels = "%b") +
+#   theme(legend.position="none") + 
+#   theme_minimal(base_size=15, base_family="Impact") +
+#   labs(title="Symbol Frequency Over Time",
+#        subtitle="",
+#        x="Date",
+#        y="Symbol Count",
+#        caption=""
+#   )  + 
+#   theme(
+#     plot.subtitle = element_text(color="#AAAAAA", size=10),
+#     plot.title = element_text(family="Impact", size = 20),
+#     plot.caption = element_text(color="#AAAAAA", size=18)
+#   ) 
+# 
+# 
+# amdposts %>% 
+#   ggplot(aes(Date,Volume, color = "red")) + 
+#   geom_line(alpha = 1, colour = 'red', size = 1) + 
+#   scale_x_date(date_breaks = "1 month",date_labels = "%b") +
+#   theme(legend.position="none") + 
+#   theme_minimal(base_size=15, base_family="Impact") +
+#   labs(title="Symbol Stock Market Volume",
+#        subtitle="",
+#        x="Date",
+#        y="Trading Volume",
+#        caption=""
+#   )  + 
+#   theme(
+#     plot.subtitle = element_text(color="#AAAAAA", size=10),
+#     plot.title = element_text(family="Impact", size = 20),
+#     plot.caption = element_text(color="#AAAAAA", size=18)
+#   ) 
+```
+
+```{r eval=FALSE, include=FALSE}
+# cor(amdposts$Volume,amdposts$wordCount)
+```
+
+Starting on the sentiment of comments for each post - this is the first method we tried using the Loughrain sentiment lexicon - a finance specific lexicon
+```{r}
+commentSentiment <- comments %>% 
+  select(link_id, created_date_time_EST, score, body) %>% 
+  mutate(body = as.character(body),
+         body = tolower(body),
+         body = str_replace_all(body,"[[:punct:]]", "")) %>% 
+  unnest_tokens(word,body) %>%
+  anti_join(stop_words)
+```
+
+
+Building list of positive and negative words based on loughrain lexicon
+```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+
+commentSentiment %>% 
+  inner_join(get_sentiments("loughran"), by = "word") %>% 
+  filter(sentiment == "negative" | sentiment == "positive") 
+ 
+
+
+```
+
+
+
+```{r fig.height=8, fig.width=8}
+commentSentiment %>%
+  count(word) %>%
+  inner_join(get_sentiments("loughran"), by = "word") %>%
+  group_by(sentiment) %>%
+  top_n(5, n) %>%
+  ungroup() %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n)) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~ sentiment, scales = "free") +
+  ylab("Frequency of word in wallstreetbets comments and corresponding sentiment")
+```
+
+sentiment by ticker using loughrain lexicon
+```{r}
+postsTopSymbols <- postSymbol %>% 
+  filter(word %in% tickers) %>% 
+  mutate(ticker = word)
+
+stock_sentiment_count <- commentSentiment %>%
+  inner_join(get_sentiments("loughran"), by = "word") %>%
+  inner_join(postsTopSymbols, by = "link_id") %>% 
+  count(sentiment, ticker) %>%
+  spread(sentiment, n, fill = 0)
+
+#write.csv(stock_sentiment_count, "stock_sentiment_count.csv")
+```
+
+Creating loughrain sentiment and transforming dataframe to long format suitable for modeling
+```{r}
+loughranSentiment <- commentSentiment %>%
+  inner_join(get_sentiments("loughran"), by = "word") %>% 
+  group_by(sentiment) %>% 
+  ungroup()
+
+loughranSentiment <- loughranSentiment %>% 
+  group_by(link_id,sentiment) %>% 
+  summarize(scoreTotal = sum(score)) %>% 
+  ungroup() 
+
+loughranSentiment <- loughranSentiment %>%
+  spread(sentiment,scoreTotal) %>% 
+  group_by(link_id) 
+
+loughranSentiment <- loughranSentiment %>% 
+  replace(is.na(.), 0)
+
+```
+
+
+
+```{r}
+stock_sentiment_count %>%
+  mutate(score = (positive - negative) / (positive + negative)) %>%
+  mutate(ticker = reorder(ticker, score)) %>%
+  ggplot(aes(ticker, score, fill = score > 0)) +
+  geom_col(show.legend = FALSE) +
+  coord_flip() +
+  labs(x = "Ticker",
+       y = "Positivity score among WallStreetBets Comments")
+```
+
+
+
+```{r}
+posts %>% 
+  group_by(as.Date(created_date_time_EST)) %>% 
+  summarise(postsPerDay = n()) %>% 
+  summarise(meanPostsPerDay = mean(postsPerDay))
+```
+
+```{r}
+comments %>% 
+  group_by(link_id) %>% 
+  summarise(commentsPerLink = n()) %>% 
+  summarise(meanCommentsPerPost = mean(commentsPerLink))
+```
+
+
+Obtaining stats on post comments - long running so commenting out for now 
+```{r}
+# postCommentsStats <- comments %>% 
+#   select(body, link_id, created_date_time_EST) %>% 
+#   mutate(body = as.character(body),
+#          body = tolower(body),
+#          body = str_replace_all(body,"[[:punct:]]", "")) %>% 
+#   unnest_tokens(word,body)
+```
+
+```{r}
+# postCommentsStats %>% 
+#   group_by(link_id) %>% 
+#   summarise(wordsPerComment = n()) %>% 
+#   summarise(meanWordsPerPost = mean(wordsPerComment))
+
+```
+
