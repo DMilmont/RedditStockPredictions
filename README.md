@@ -38,7 +38,29 @@ mongo "mongodb+srv://dvafinalproject-anotq.mongodb.net/liztd" --username <userna
     c. sentiments
 	This collection aggregates stock price with reddit sentiment analysis and final prediction
   
-Web Server:
-  1. The web server 
+
+Digital Ocean droplet:
+hostname: ubuntu-s-1vcpu-1gb-nyc1-01: 159.89.232.113
+
+Domain:
+liztd.com
+
+The following fuctionalities were hosted on one ubuntu server hosted by digitalocean.
+
+Daily Load:
+The python script under CODE/liztd_python_load is setup as a cronjob to be executed every night.
+
+Reddit Stream:
+This is handled by the python script inside CODE/liztd_python_stream folder. This script has an open connection to monitor reddit 'wallstreetbets' stream and upload them into the mongodb database.
+
+Tools:
+PM2 - PM2 is a process mangement tool which is setup to keep the jobs running the scheduled time for data collection.
+
+Web Application:
+    API:
+        The python bottlepy based web server is hosted as an api to the database and the frontend. The project is present in CODE/liztd_python_api
   
-  hostname: ubuntu-s-1vcpu-1gb-nyc1-01: 159.89.232.113
+    UI: 
+        The UI is created using ReactjS, evergreen library for UI components and Recharts for charting components. The scripts neccessary to run the web ui are 
+        present at CODE/liztd_ui/readme.md file. 
+  
