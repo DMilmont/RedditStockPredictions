@@ -83,7 +83,7 @@ class StreamComponent extends Component {
                                             intent={intent}
                                         >
                                             <Table.TextCell>
-                                                <Paragraph>{post.title}</Paragraph>
+                                                <Paragraph>{post.title} </Paragraph>
                                             </Table.TextCell>
                                         </Table.Row>
                                         )

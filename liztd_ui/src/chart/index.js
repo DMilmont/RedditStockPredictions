@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Pane, Tablist, Tab } from 'evergreen-ui';
-import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
+import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label} from 'recharts';
 
 class CustomizedXAxisTick extends Component {
     render () {
@@ -34,7 +34,7 @@ class ChartComponent extends Component {
             data: null,
             ticker: this.props.ticker,
             selectedTabIndex: 0,
-            tabs: ['Historical Price', 'Sentiment Score', 'Number of Posts', 'Prediction vs actual']
+            tabs: ['Historical Price', 'Sentiment Score', 'Number of Posts', 'Prediction vs Actual']
         }
     }
     componentWillReceiveProps(newProps) {
@@ -58,8 +58,8 @@ class ChartComponent extends Component {
     }
 
     fetchJSONData(ticker, callback) {
-        //axios.get('http://104.248.113.19:8000/info/' + ticker)
-        axios.get('http://localhost:8000/info/' + ticker)
+        axios.get('http://104.248.113.19:8000/info/' + ticker)
+        //axios.get('http://localhost:8000/info/' + ticker)
           .then(function(response) {
             callback(response);
             });
@@ -68,37 +68,45 @@ class ChartComponent extends Component {
     render() {
         const ChartView = [
             (<LineChart width={600} height={300} data={this.state.data} margin={{top: 5, right: 10, left: 10, bottom: 25}}>
-                <XAxis dataKey="date" height={60} tick={<CustomizedXAxisTick/>} label="Price"/>
-                <YAxis tick={<CustomizedYAxisTick/>} />
+                <XAxis dataKey="date" height={60} tick={<CustomizedXAxisTick/>}>
+                    <Label value="Date" offset={0} position="insideBottomRight" />
+                </XAxis>
+                <YAxis tick={<CustomizedYAxisTick/>}/>
                 <CartesianGrid strokeDasharray="3 3"/>
                 <Tooltip/>
                 <Legend verticalAlign="top" height={36}/>
-                <Line type="monotone" dot={false} dataKey="close" stroke="#8884d8" activeDot={{r: 8}}/>
+                <Line type="monotone" dot={false} dataKey="close" stroke="#8884d8" activeDot={{r: 8}} name="closing price"/>
             </LineChart>),
             (<LineChart width={600} height={300} data={this.state.data} margin={{top: 5, right: 10, left: 10, bottom: 25}}>
-                <XAxis dataKey="date" height={60} tick={<CustomizedXAxisTick/>}/>
+                <XAxis dataKey="date" height={60} tick={<CustomizedXAxisTick/>}>
+                    <Label value="Date" offset={0} position="insideBottomRight" />
+                </XAxis>
                 <YAxis tick={<CustomizedYAxisTick/>} />
                 <CartesianGrid strokeDasharray="3 3"/>
                 <Tooltip/>
                 <Legend verticalAlign="top" height={36}/>
-                <Line type="monotone" dot={false} dataKey="sumCompound" stroke="#8884d8" activeDot={{r: 8}}/>
+                <Line type="monotone" dot={false} dataKey="sumCompound" stroke="#8884d8" activeDot={{r: 8}} name="compound sentiment score"/>
             </LineChart>),
             (<LineChart width={600} height={300} data={this.state.data} margin={{top: 5, right: 10, left: 10, bottom: 25}}>
-                <XAxis dataKey="date" height={60} tick={<CustomizedXAxisTick/>}/>
+                <XAxis dataKey="date" height={60} tick={<CustomizedXAxisTick/>}>
+                    <Label value="Date" offset={0} position="insideBottomRight" />
+                </XAxis>
                 <YAxis tick={<CustomizedYAxisTick/>} />
                 <CartesianGrid strokeDasharray="3 3"/>
                 <Tooltip/>
                 <Legend verticalAlign="top" height={36}/>
-                <Line type="monotone" dot={false} dataKey="count" stroke="#8884d8" activeDot={{r: 8}}/>
+                <Line type="monotone" dot={false} dataKey="count" stroke="#8884d8" activeDot={{r: 8}} name="number of posts"/>
             </LineChart>),
             (<LineChart width={600} height={300} data={this.state.data} margin={{top: 5, right: 10, left: 10, bottom: 25}}>
-                <XAxis dataKey="date" height={60} tick={<CustomizedXAxisTick/>}/>
+                <XAxis dataKey="date" height={60} tick={<CustomizedXAxisTick/>}>
+                    <Label value="Date" offset={0} position="insideBottomRight" />
+                </XAxis>
                 <YAxis tick={<CustomizedYAxisTick/>} />
                 <CartesianGrid strokeDasharray="3 3"/>
                 <Tooltip/>
                 <Legend verticalAlign="top" height={36}/>
-                <Line type="monotone" dot={false} dataKey="pred" stroke="#8884d8" activeDot={{r: 8}}/>
-                <Line type="monotone" dot={false} dataKey="pct2" stroke="#82ca9d" activeDot={{r: 8}}/>
+                <Line type="monotone" dot={false} dataKey="pred" stroke="#8884d8" activeDot={{r: 8}} name="prediction"/>
+                <Line type="monotone" dot={false} dataKey="pct2" stroke="#82ca9d" activeDot={{r: 8}} name="%change in 2 days"/>
             </LineChart>)
         ];
         return (
