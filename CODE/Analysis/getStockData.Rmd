@@ -1,0 +1,95 @@
+---
+title: "Stock Data"
+output: html_notebook
+---
+
+```{r message=FALSE, warning=FALSE}
+library(TTR)
+library(quantmod)
+library(tidyverse)
+```
+
+This notebook will obtain all stock data. You must have run cleanData.rmd and RedditSentiment.Rmd first before moving onto this step. 
+
+
+Obtaining stock market tickers
+```{r}
+stockSymbols <- stockSymbols(exchange = c("AMEX", "NASDAQ", "NYSE"), sort.by = c("Exchange",
+"Symbol"), quiet = FALSE)
+
+stockSymbols <- stockSymbols %>% 
+  mutate(Symbol = tolower(Symbol)) ##%>% 
+  ##write.csv(.,'stockTickers.csv', row.names = FALSE) 
+```
+
+unique industries - just for reference
+```{r eval=FALSE, include=FALSE}
+unique(stockSymbols$Industry)
+```
+
+Pulling all stock prices by day for specified period. Only pulling prices of the stock tickers used in tickers 
+```{r}
+#https://stackoverflow.com/questions/48207991/convert-xts-to-data-frame
+
+#manually created list of stocks we are focusing on
+tickers <- c("mu","amd","tsla","snap","nvda","fb","amzn","baba","aapl","ge","msft","nflx")
+
+dataEnv <- new.env()
+for(company in tickers){
+  try(getSymbols(company, auto.assign = TRUE, src="yahoo", from="2018-01-01", to="2018-09-30",return.class = 'zoo', env=dataEnv))
+  print(company)
+}
+
+plist <- eapply(dataEnv, Ad)
+ad.Stocks <- do.call(merge, plist) 
+
+
+Stockreturns <- data.frame(c(diff(ad.Stocks))) 
+StockPrices <- fortify.zoo(ad.Stocks)
+Stockreturns.pcnt <- data.frame(c(diff(ad.Stocks)/ad.Stocks[-nrow(ad.Stocks),] )) 
+
+Stockreturns.pcnt <- round(Stockreturns.pcnt,3)
+
+
+```
+
+
+Creating final dataframe suitable for modeling in the long format and adds in lagged price changes. 
+```{r}
+StockPrices <- StockPrices %>% 
+  mutate(Date = Index,
+         Index = NULL) 
+
+StockPrices_Long <- StockPrices %>% 
+  gather(key,value, 1:(length(StockPrices)-1)) %>% 
+  group_by(Date, key) %>% 
+  rename(stockTicker = key,
+         stockPrice = value
+  )
+
+StockPricesFinal <- StockPrices_Long %>% 
+  group_by(stockTicker) %>% 
+  mutate(
+    lag1 = lag(stockPrice),
+    lag2 = lag(stockPrice,2),
+    lag3 = lag(stockPrice,3),
+    lag7 = lag(stockPrice,7),
+    lag30 = lag(stockPrice,30),
+    lag90 = lag(stockPrice,90),
+    pct.change1 = round(((stockPrice - lag1) / lag1),3),
+    pct.change2 = round(((stockPrice - lag2) / lag2),3),
+    pct.change3 = round(((stockPrice - lag3) / lag3),3),
+    pct.change7 = round(((stockPrice - lag7) / lag7),3),
+    pct.change30 = round(((stockPrice - lag30) / lag30),3),
+    pct.change90 = round(((stockPrice - lag90) / lag90),3)
+  ) 
+  
+write.csv(StockPricesFinal, "StockPricesFinal.csv")
+  
+  
+
+  
+```
+
+
+

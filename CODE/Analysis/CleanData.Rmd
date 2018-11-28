@@ -1,0 +1,166 @@
+---
+title: "Reddit Posts Cleaning/EDA"
+output: html_notebook
+---
+
+```{r warning=FALSE}
+library(tidyverse)
+#library(Amelia)
+```
+
+Data from big query obtained with the following queries:
+SELECT * FROM `fh-bigquery.reddit_posts.2018_05` where subreddit = 'wallstreetbets';
+SELECT * FROM [fh-bigquery:reddit_comments.2018_05] WHERE subreddit = 'wallstreetbets'
+
+The purpose of this notebook is to walk through basic cleaning and EDA to produce a dataset for analysis. 
+
+This will combine all the csv files in the folder structure - the csv files should be part of the git repository under RedditComments
+
+```{r message=FALSE, warning=FALSE}
+file_names_comments <- dir('./comments/') #where you have your files
+file_names_posts <- dir('./posts/') #where you have your files
+
+setwd("C:/Users/Dave/6242Project/RedditComments/comments")
+comments <- do.call(rbind,lapply(file_names_comments,read.csv))
+setwd("C:/Users/Dave/6242Project/RedditComments/posts")
+posts <- do.call(rbind,lapply(file_names_posts,read.csv))
+```
+
+comment/post dataset characteristics
+
+Comments: 20 X 971719
+Posts: 33 X 57390
+```{r}
+length(comments) 
+nrow(comments)
+
+length(posts) 
+nrow(posts)
+```
+
+
+Each post has a css_class name which is basically a tag for the type of post. Initially we wanted to use tagged posts thinking they would be of higher quality but proper tagging of posts is not consistent and did not occur during the entire period we had post data. 
+
+In a perfect situation we would only look at posts with the following tags: futures, options, yolo, earnings, loss, fundamentals, question, stocks, technicals, daily, dd, and profit. 
+
+Average score of post by tagged categories and count
+```{r}
+
+#tagged categories ordered by avgscore and count
+posts %>% 
+  group_by(link_flair_css_class) %>% 
+  summarize(count = n(),
+            avgScore = mean(score)
+            ) %>% 
+  arrange(desc(avgScore,count))
+
+```
+
+Fixing column types to enable joining of the two tables
+add link_id to posts with t3_ concat to match format of id in comments. 
+https://www.reddit.com/r/datasets/comments/65wb9a/combining_reddit_comments_and_posts_in_the_reddit/
+```{r}
+posts <- posts %>% 
+  mutate(id = as.character(id),
+         from_id = as.character(from_id),
+         link_id = paste("t3_",id, sep = "")
+         )
+
+comments <- comments %>% 
+  mutate(id = as.character(id),
+         link_id = as.character(link_id))
+
+```
+
+
+
+created_utc timestamp comes as a unix timestamp in seconds. Clearing this up. Making new column with EST timestamp.
+```{r}
+posts <- posts %>% 
+  mutate(created_utc_converted = lubridate::as_datetime(created_utc),
+         created_date_time_UTC = lubridate::force_tz(created_utc_converted, tzone = "UTC"),
+         created_date_time_EST = lubridate::force_tzs(created_date_time_UTC, tzones = "UTC", tzone_out = "America/New_York")
+         )
+
+comments <- comments %>% 
+  mutate(created_utc_converted = lubridate::as_datetime(created_utc),
+         created_date_time_UTC = lubridate::force_tz(created_utc_converted, tzone = "UTC"),
+         created_date_time_EST = lubridate::force_tzs(created_date_time_UTC, tzones = "UTC", tzone_out = "America/New_York")
+         )
+```
+
+
+Basic summary stats for posts
+The missmap indicates that from_id, from, from_king, downs, ups, name, saved should be dropped. After dropping columns missmap is nearly perfect 
+```{r eval=FALSE, include=FALSE}
+summary(posts)
+#missmap(posts)
+```
+
+Dropping unneeded columns
+
+```{r}
+posts <- posts %>% 
+  select(-from_id,-from,-from_kind,-downs, -ups, -name, -saved,-created_utc,-created_utc_converted)
+```
+
+
+
+Basic summary stats for comments
+The missmap indicates that ups, downs, name, score_hidden, archived should be dropped - after dropping columns missmap is perfect
+```{r}
+summary(comments)
+#missmap(comments)
+```
+
+Dropping uneeded comment columns
+ups, downs, name, score_hidden, archived
+```{r}
+comments <- comments %>% 
+  select(-ups,-downs,-name,-score_hidden, -archived, -created_utc,-created_utc_converted)
+```
+
+
+Example of joining comments and posts and filtering by css class - this is not used in the final analysis 
+```{r eval=FALSE, include=FALSE}
+daily_full <- posts %>% 
+  filter(link_flair_css_class == "daily") %>% 
+  inner_join(comments, by = c("link_id"))
+
+```
+
+
+Generating 1000 comments which was used to help tag sentiment for custom sentiment lexicon
+```{r eval=FALSE, include=FALSE}
+posts %>% 
+  filter(link_flair_css_class %in% c("earnings", "fundamentals", "daily")) %>% 
+  inner_join(comments, by = c("link_id")) %>% 
+  select(body, link_id) %>% 
+  filter(nchar(as.character(body)) >= 20) %>% 
+  mutate(body = str_replace_all(body,"[[:punct:]]", "")) %>% 
+  sample_n(1000) #%>% 
+  #write.csv(.,'1000comments.csv', row.names = FALSE) 
+  
+```
+
+posts by day average
+```{r}
+posts %>% 
+  group_by(Date = as.Date(created_date_time_EST)) %>% 
+  summarize(count = n()) %>% 
+  summarize(mean(count))
+```
+
+comments per post average
+```{r}
+comments %>% 
+  group_by(link_id) %>% 
+  summarize(count = n()) %>% 
+  summarize(average = mean(count),
+            median_ = median(count),
+            minimum = min(count),
+            maximum = max(count))
+```
+
+
+
