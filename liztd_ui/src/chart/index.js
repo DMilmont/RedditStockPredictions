@@ -58,8 +58,8 @@ class ChartComponent extends Component {
     }
 
     fetchJSONData(ticker, callback) {
-        axios.get('http://104.248.113.19:8000/info/' + ticker)
-        //axios.get('http://localhost:8000/info/' + ticker)
+        //axios.get('http://104.248.113.19:8000/info/' + ticker)
+        axios.get('http://localhost:8000/info/' + ticker)
           .then(function(response) {
             callback(response);
             });
@@ -68,7 +68,7 @@ class ChartComponent extends Component {
     render() {
         const ChartView = [
             (<LineChart width={600} height={300} data={this.state.data} margin={{top: 5, right: 10, left: 10, bottom: 25}}>
-                <XAxis dataKey="date" height={60} tick={<CustomizedXAxisTick/>}/>
+                <XAxis dataKey="date" height={60} tick={<CustomizedXAxisTick/>} label="Price"/>
                 <YAxis tick={<CustomizedYAxisTick/>} />
                 <CartesianGrid strokeDasharray="3 3"/>
                 <Tooltip/>
