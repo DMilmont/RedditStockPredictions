@@ -86,10 +86,74 @@ topSymbols <- unique(symbolCounts$word)
 
 WallStreetBets seems to only talk about specific stock tickers. A count of each ticker shows it is heavily skewed towards tech stocks. We chose stock tickers with a count > 50 and manually filtered our tickers that seemed to also be a common word. Examples of which might be cash, love, beat, play. All of these are valid tickers, but are also commonly used in post titles. 
 ```{r}
-symbolCounts %>% 
+removeBadSymbols <- c(
+  "rh",
+  "call",
+"plot",
+"post",
+"fds",
+"run",
+"low",
+"beat",
+"life",
+"play",
+"cash",
+"live",
+"hope",
+"win",
+"ceo",
+"gold",
+"fund",
+"mod",
+"job",
+"save",
+"hear",
+"true",
+"dis",
+"plan",
+"baby",
+"car",
+"pm",
+"home",
+"ath",
+"cars",
+"eat",
+"fast",
+"rev",
+"team",
+"cat",
+"club",
+"loan",
+"mind",
+"race",
+"exp",
+"jobs",
+"blue",
+"bro",
+"info",
+"kids",
+"link",
+"bid",
+"roll",
+"fat",
+"riot",
+"site",
+"rare",
+"meet",
+"aa",
+"air",
+"edge",
+"love",
+"ago"
+)
+
+
+SymCount <- symbolCounts %>% 
+  filter(!word %in% removeBadSymbols) %>% 
   group_by(word) %>% 
-  count() %>% 
-  arrange(desc(n))
+  summarize(wordCount = n()) %>% 
+  mutate(ratio = wordCount/sum(wordCount)) %>% 
+  arrange(desc(wordCount))
 
 #manually created list of stocks we are focusing on
 tickers <- c("mu","amd","tsla","snap","nvda","fb","amzn","baba","aapl","ge","msft","nflx")

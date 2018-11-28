@@ -200,3 +200,11 @@ ModelData %>%
   ggplot(aes(pct.change2)) + geom_histogram(binwidth = .01)
 ```
 
+```{r}
+
+
+finalModel <- lm(pct.change2 ~ sumCompoundV + count + ticker, data = na.omit(ModelData), na.action = na.exclude)
+
+summary(finalModel)
+```
+
