@@ -33,7 +33,8 @@ class StreamComponent extends Component {
     }
 
     fetchPosts(ticker, cb) {
-        axios.get('http://localhost:8080/posts/' + ticker)
+        axios.get('http://104.248.113.19:8000/posts/' + ticker)
+        //axios.get('http://localhost:8000/posts/' + ticker)
             .then(function(response) {
                 cb(response.data)
             });

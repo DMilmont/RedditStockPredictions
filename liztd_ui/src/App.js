@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Pane, Heading, Autocomplete, TextInput } from 'evergreen-ui';
+import { Pane, Heading, Select } from 'evergreen-ui';
 import StreamComponent from './stream';
 import Fundamentals from './fundamentals';
 import ChartComponent from './chart';
@@ -44,6 +44,7 @@ class App extends Component {
   }
 
   render() {
+    const stocks = ['AAPL', 'AMD', 'AMZN', 'BABA', 'FB', 'GE', 'MSFT', 'MU', 'NFLX', 'NVDA', 'SNAP', 'TSLA']
     return (
       <div className="App">
         <Pane display="flex" padding={16} background="tint2"  elevation={1}>
@@ -51,38 +52,15 @@ class App extends Component {
             <Heading size={600}>Liztd</Heading>
           </Pane>
           <Pane flex={1}>
-            <Autocomplete
-              title="Custom title"
-              onChange={changedItem => {
-                this.initiateFetchStockData(changedItem);
-              }}
-
-              items={['AMD', 'AAPL', 'AMZN', 'ADBE', 'A']}
-            >
-              {({
-                key,
-                getInputProps,
-                getButtonProps,
-                getRef,
-                inputValue,
-                openMenu,
-                toggleMenu
-              }) => (
-                <Pane
-                  key={key}
-                  innerRef={getRef}
-                  display="flex"
-                >
-                  <TextInput
-                    flex="1"
-                    placeholder="search symbol..."
-                    value={inputValue}
-                    onFocus={openMenu}
-                    {...getInputProps()}
-                  />
-                </Pane>
-              )}
-            </Autocomplete>
+            <Select width="100%" onChange={(event) => {
+              this.initiateFetchStockData(event.target.value);
+            }}>
+              {stocks.map((stock,stockIdx) => {
+                return stockIdx === 0 ? 
+                  (<option value={stock} checked>{stock}</option>
+                  ) : (<option value={stock} checked>{stock}</option>)
+              })}
+            </Select>
           </Pane>
         </Pane>
         <Pane display="flex">

@@ -3,6 +3,30 @@ import axios from 'axios';
 import { Pane, Tablist, Tab } from 'evergreen-ui';
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
 
+class CustomizedXAxisTick extends Component {
+    render () {
+      const {x, y, stroke, payload} = this.props;
+          
+         return (
+          <g transform={`translate(${x},${y})`}>
+          <text x={0} y={0} dy={16} textAnchor="end" fontSize={10} fill="#666" transform="rotate(-35)">{payload.value}</text>
+        </g>
+      );
+    }
+};
+
+class CustomizedYAxisTick extends Component {
+    render () {
+      const {x, y, stroke, payload} = this.props;
+          
+         return (
+          <g transform={`translate(${x},${y})`}>
+          <text x={0} y={0} dy={16} textAnchor="end" fontSize={10} fill="#666">{payload.value}</text>
+        </g>
+      );
+    }
+};
+
 class ChartComponent extends Component {
     constructor(props) {
         super(props);
@@ -18,10 +42,6 @@ class ChartComponent extends Component {
             ticker: newProps.ticker
         });
         this.initiateFetchStockData(newProps.ticker);
-        //window.RGraph.reset(document.getElementById('chart-container-0'));
-        //window.RGraph.reset(document.getElementById('chart-container-1'));
-        //window.RGraph.reset(document.getElementById('chart-container-2'));
-        // this.drawPriceChart();
     }
 
     componentDidMount() {
@@ -38,7 +58,8 @@ class ChartComponent extends Component {
     }
 
     fetchJSONData(ticker, callback) {
-        axios.get('http://localhost:8080/info/' + ticker)
+        axios.get('http://104.248.113.19:8000/info/' + ticker)
+        //axios.get('http://localhost:8000/info/' + ticker)
           .then(function(response) {
             callback(response);
             });
@@ -46,36 +67,36 @@ class ChartComponent extends Component {
 
     render() {
         const ChartView = [
-            (<LineChart width={700} height={300} data={this.state.data} margin={{top: 5, right: 30, left: 10, bottom: 25}}>
-                <XAxis dataKey="date" angle={-45}  textAnchor="end"/>
-                <YAxis />
+            (<LineChart width={600} height={300} data={this.state.data} margin={{top: 5, right: 10, left: 10, bottom: 25}}>
+                <XAxis dataKey="date" height={60} tick={<CustomizedXAxisTick/>}/>
+                <YAxis tick={<CustomizedYAxisTick/>} />
                 <CartesianGrid strokeDasharray="3 3"/>
                 <Tooltip/>
-                <Legend />
+                <Legend verticalAlign="top" height={36}/>
                 <Line type="monotone" dot={false} dataKey="close" stroke="#8884d8" activeDot={{r: 8}}/>
             </LineChart>),
-            (<LineChart width={700} height={300} data={this.state.data} margin={{top: 5, right: 30, left: 10, bottom: 25}}>
-                <XAxis dataKey="date" angle={-45}  textAnchor="end"/>
-                <YAxis />
+            (<LineChart width={600} height={300} data={this.state.data} margin={{top: 5, right: 10, left: 10, bottom: 25}}>
+                <XAxis dataKey="date" height={60} tick={<CustomizedXAxisTick/>}/>
+                <YAxis tick={<CustomizedYAxisTick/>} />
                 <CartesianGrid strokeDasharray="3 3"/>
                 <Tooltip/>
-                <Legend />
+                <Legend verticalAlign="top" height={36}/>
                 <Line type="monotone" dot={false} dataKey="sumCompound" stroke="#8884d8" activeDot={{r: 8}}/>
             </LineChart>),
-            (<LineChart width={700} height={300} data={this.state.data} margin={{top: 5, right: 30, left: 10, bottom: 25}}>
-                <XAxis dataKey="date" angle={-45}  textAnchor="end"/>
-                <YAxis />
+            (<LineChart width={600} height={300} data={this.state.data} margin={{top: 5, right: 10, left: 10, bottom: 25}}>
+                <XAxis dataKey="date" height={60} tick={<CustomizedXAxisTick/>}/>
+                <YAxis tick={<CustomizedYAxisTick/>} />
                 <CartesianGrid strokeDasharray="3 3"/>
                 <Tooltip/>
-                <Legend />
+                <Legend verticalAlign="top" height={36}/>
                 <Line type="monotone" dot={false} dataKey="count" stroke="#8884d8" activeDot={{r: 8}}/>
             </LineChart>),
-            (<LineChart width={700} height={300} data={this.state.data} margin={{top: 5, right: 30, left: 10, bottom: 25}}>
-                <XAxis dataKey="date" angle={-45}  textAnchor="end"/>
-                <YAxis />
+            (<LineChart width={600} height={300} data={this.state.data} margin={{top: 5, right: 10, left: 10, bottom: 25}}>
+                <XAxis dataKey="date" height={60} tick={<CustomizedXAxisTick/>}/>
+                <YAxis tick={<CustomizedYAxisTick/>} />
                 <CartesianGrid strokeDasharray="3 3"/>
                 <Tooltip/>
-                <Legend />
+                <Legend verticalAlign="top" height={36}/>
                 <Line type="monotone" dot={false} dataKey="pred" stroke="#8884d8" activeDot={{r: 8}}/>
                 <Line type="monotone" dot={false} dataKey="pct2" stroke="#82ca9d" activeDot={{r: 8}}/>
             </LineChart>)
@@ -95,7 +116,7 @@ class ChartComponent extends Component {
                     </Tab>
                 ))}
                 </Tablist>
-                <Pane padding={16} background="tint1" flex="1">
+                <Pane padding={2} background="tint1" flex="1">
                     {this.state.tabs.map((tab, tabIndex) => (
                         <Pane
                         key={tab}
@@ -113,45 +134,6 @@ class ChartComponent extends Component {
                 </Pane>
             </Pane> 
         )
-    }
-
-    drawPriceChart() {
-        if(document.getElementById("chart-container-0") !== null) {
-            console.log('container is present', document.getElementById("chart-container-0").getContext("2d"));
-            new window.RGraph.Line({
-                id: 'chart-container-0',
-                price: this.state.price,
-                options: {
-                    backgroundGridVlines: false,
-                    backgroundGridHlines: false,
-                    backgroundGridBorder: false,
-                    //key: ['Richard','Charlie'],
-                    
-                    gutterTop: 55,
-                    
-                    linewidth: 1,
-                    hmargin: 0,
-                    
-                    title: 'Historical Price',
-                    
-                    gutterLeft: 50,
-                    gutterBottom: 50,
-                    yaxisDecimals: 2,
-                    
-                    tickmarksStyle: 'endcircle',
-                    tickmarksFill: 'white',
-                    tickmarksLinewidth: 3,
-                    tickmarksSize: 10,
-                    
-                    spline: false,
-                    xaxis: true,
-                    yaxis: true,
-                    xaxisLabels: this.state.labels,
-                    shadow: false
-                }
-            }).draw();
-            
-        }
     }
 }
 

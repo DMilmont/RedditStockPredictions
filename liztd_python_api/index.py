@@ -3,6 +3,7 @@ from pymongo import MongoClient
 import pandas as pd
 import json
 import os
+import socket
 
 # connection to mongodb
 # mongoClient = MongoClient('localhost', 27017)
@@ -38,20 +39,13 @@ def index(ticker):
 @route('/posts/<ticker>')
 @enable_cors
 def returnPosts(ticker):
-    '''resp = []
-    for posts in c_submissions.find({
-        "$text": {
-            "$search": ticker
-        },
-    }, {"_id": 0, "id": 1, "title": 1, "selftext": 1, "compound": 1}):
-        resp.append(posts)
-    return json.dumps(resp)'''
     return json.dumps(list(
          c_submissions.find({
             "$text": {
                 "$search": ticker
             },
-        }, {"_id": 0, "id": 1, "title": 1, "selftext": 1, "compound": 1})
+        }, {"_id": 0, "id": 1, "title": 1, "selftext": 1, "compound": 1, "created_utc": 1}).sort([("created_utc", -1)])
     ))
 
-run(host='localhost', port=8080)
+run(host='104.248.113.19', port=8000)
+#run(host='localhost', port=8000)
