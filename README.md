@@ -1,9 +1,30 @@
 # 6242Project
 Denver project for cse 6242
 
-MongoDB Cluster:
 
-Scripts:
+# Data and Analysis 
+
+All analysis and data collection is found within CODE/Analysis
+
+## Obtain and Clean Data
+
+Obtain reddit comments and posts from google big query. https://bigquery.cloud.google.com/dataset/fh-bigquery:reddit_posts?pli=1
+
+Example queries for May 2018. Each table represents 1 month. Repeat as necessary.
+```
+SELECT * FROM fh-bigquery.reddit_posts.2018_05 where subreddit = 'wallstreetbets'; 
+SELECT * FROM fh-bigquery:reddit_comments.2018_05 WHERE subreddit = 'wallstreetbets';
+```
+
+Place .csv files from big query into respective folders. 
+
+Run the following files in order.
+
+CleanData.rmd > RedditSentiment.rmd > getStockData.rmd > Python Sentiment/vaderSentiment.py > FinalModel.Rmd > FinalModel_2.Rmd
+
+# MongoDB Cluster:
+
+## Scripts:
 1) Export comments collection (before sentiment was calcuated)
 	mongoexport --db liztd -c comments --out comments.csv --type csv --fields "author_flair_css_class,distinguished,ups,subreddit,body,score_hidden,archived,name,author,author_flair_text,downs,created_utc,subreddit_id,link_id,parent_id,score,retrieved_on,controversiality,gilded,id"
 
@@ -22,7 +43,7 @@ mongoexport --db liztd -c reddit_sentiments --out sentiments.csv --type csv --fi
 	mongoimport --host dvafinalproject-shard-0/dvafinalproject-shard-00-00-anotq.mongodb.net:27017,dvafinalproject-shard-00-01-anotq.mongodb.net:27017,dvafinalproject-shard-00-02-anotq.mongodb.net:27017 --ssl --username arvnan52 --password <PASSWORD> --authenticationDatabase admin --db liztd --collection reddit_comments --type csv --file comments_with_sentiments.csv --headerline
 	mongoimport --host dvafinalproject-shard-0/dvafinalproject-shard-00-00-anotq.mongodb.net:27017,dvafinalproject-shard-00-01-anotq.mongodb.net:27017,dvafinalproject-shard-00-02-anotq.mongodb.net:27017 --ssl --username arvnan52 --password <PASSWORD> --authenticationDatabase admin --db liztd --collection sentiments --type csv --file sentiments.csv --headerline
 
-Database connection and details
+## Database connection and details
 1. Connect to the cloud.mongodb.com (arvnan52/hp..)
 2. The connection is enabled only from 2 IP's.
     a. My laptop
@@ -30,7 +51,7 @@ Database connection and details
 
 mongo "mongodb+srv://dvafinalproject-anotq.mongodb.net/liztd" --username <username> --password <password>
 
-3. Collections:
+## 3. Collections:
     a. reddit_submissions
         db.reddit_submissions.createIndex({title: "text", selftext: "text", id: 1, created_utc: 1})
     b. reddit_comments
@@ -39,24 +60,24 @@ mongo "mongodb+srv://dvafinalproject-anotq.mongodb.net/liztd" --username <userna
 	This collection aggregates stock price with reddit sentiment analysis and final prediction
   
 
-Digital Ocean droplet:
+### Digital Ocean droplet:
 hostname: ubuntu-s-1vcpu-1gb-nyc1-01: 159.89.232.113
 
-Domain:
+### Domain:
 liztd.com
 
 The following fuctionalities were hosted on one ubuntu server hosted by digitalocean.
 
-Daily Load:
+## Daily Load:
 The python script under CODE/liztd_python_load is setup as a cronjob to be executed every night.
 
-Reddit Stream:
+## Reddit Stream:
 This is handled by the python script inside CODE/liztd_python_stream folder. This script has an open connection to monitor reddit 'wallstreetbets' stream and upload them into the mongodb database.
 
-Tools:
+## Tools:
 PM2 - PM2 is a process mangement tool which is setup to keep the jobs running the scheduled time for data collection.
 
-Web Application:
+## Web Application:
     API:
         The python bottlepy based web server is hosted as an api to the database and the frontend. The project is present in CODE/liztd_python_api
   
