@@ -3,7 +3,7 @@ Denver project for cse 6242
 
 The goal of our project is to understand the impact of social media posts on the future prices of individual stocks. We examined the impact of posts in the social media platform reddit.com within investment focused subreddits/forums using textual analysis techniques.
 
-The files found here can be used to clean and apply sentiment to reddit posts and comments as well as create linear regression models using this data. We are also supplying the code which can be used for the interactive web application that is used to visualize real time sentiment and prediction for specific stocks tickers. 
+The files found here can be used to clean and apply sentiment to reddit posts and comments as well as create regression models using this data. We are also supplying the code which can be used for the interactive web application that is used to visualize real time sentiment and prediction for specific stocks tickers. 
 
 # Data and Analysis 
 
