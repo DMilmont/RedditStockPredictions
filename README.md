@@ -1,5 +1,4 @@
-# 6242Project
-Denver project for cse 6242
+# Project
 
 The goal of our project is to understand the impact of social media posts on the future prices of individual stocks. We examined the impact of posts in the social media platform reddit.com within investment focused subreddits/forums using textual analysis techniques.
 
