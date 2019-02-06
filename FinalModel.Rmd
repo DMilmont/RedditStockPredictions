@@ -1,0 +1,214 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(readr)
+library(tidyverse)
+
+options(scipen = 999)
+```
+
+```{r message=FALSE, warning=FALSE}
+#if you do not have FinalData.csv generated already you must use redditsentiment.rmd to generate it on your local machine. The individual post and comment csv files should be pullable from git and found within their respective folders. You must also run the vader sentiment python file to generate sentiment with vader. This is a social media specific lexicon. This is found within the Python Sentiment folder and named vaderSentiment.py
+
+
+Data <- read_csv("./FinalDataVaderSentiment.csv")
+#Stock tickers that are mentioned at least 5 times per day on wallstreetbets - generated in RedditSentiment.rmd
+WallStreetBetsTickers <- read_csv("./RedditComments/WallStreetBetsTickers.csv")
+#stock data final format for analysis and suitable for joining to Final Reddit Data (FinalData)
+StockPricesFinal <- read_csv("./RedditComments/StockPricesFinal.csv")
+#lower casing to match FinalData format 
+```
+
+
+```{r}
+
+StockPricesFinal <- StockPricesFinal %>% mutate(stockTicker = tolower(stockTicker))
+
+#select only popular tickers
+tickers <- c("mu","amd","tsla","snap","nvda","fb","amzn","baba","aapl","ge","msft","nflx")
+```
+
+
+Add Loughrain Sentiment and vader sentiment for final dataframe to be used in modeling 
+```{r}
+ModelData <- Data %>% 
+  select(created_date_time_EST,compound,neg,pos,ticker, link_id) %>% 
+  mutate(Date = as.Date(created_date_time_EST)) %>% 
+  inner_join(loughranSentiment, by = c("link_id" = "link_id")) %>% 
+  group_by(Date, ticker) %>% 
+  summarise(sumNegV = sum(neg),
+            sumPosV = sum(pos),
+            sumCompoundV = sum(compound),
+            sumConL = sum(constraining),
+            sumLitL = sum(litigious),
+            sumNegL = sum(negative),
+            sumPosL = sum(positive),
+            sumSupL = sum(superfluous),
+            sumUncert = sum(uncertainty),
+            count = n()
+            ) %>% 
+  right_join(StockPricesFinal, by = c("Date" = "Date", "ticker" = "stockTicker") ) %>% 
+  filter(ticker %in% tickers) %>% 
+  mutate(
+    ticker = as.factor(ticker)
+  )
+```
+
+
+
+train/test splits
+```{r}
+train <- ModelData %>% 
+  filter(Date < '2018-07-01')
+
+test <- ModelData %>% 
+  filter(Date >= '2018-07-01')
+```
+
+
+models and experiments 
+
+Experiment 1 - full model on pct.change2 
+```{r}
+mod1 <- lm(pct.change2 ~ ticker + sumNegV + sumPosV + sumCompoundV + sumConL + sumLitL +sumNegL + sumPosL + sumSupL + sumUncert + count, data = ModelData, na.action = na.exclude)
+summary(mod1)
+
+plot(mod1)
+
+#test$pred <- predict(mod1,test)
+
+#test$residuals <- test$pred - test$pct.change2
+
+```
+
+
+backward selection with pct change 1 
+```{r}
+fullmodel1 <- lm(pct.change1 ~ ticker + sumNegV + sumPosV + sumCompoundV + sumConL + sumLitL +sumNegL + sumPosL + sumSupL + sumUncert + count, data = na.omit(ModelData), na.action =  na.exclude)
+stepResults1 <- step(fullmodel1, direction = "backward", trace=FALSE ) 
+
+stepResults1$call$formula
+```
+
+Determining stepwise model pcnt change 1
+```{r}
+BestStepWiseModel1 <- lm(stepResults1$call$formula, data = na.omit(ModelData), na.action = na.exclude)
+
+summary(BestStepWiseModel1)
+
+plot(BestStepWiseModel1)
+```
+
+backward selection with pct change 2
+```{r}
+fullmodel2 <- lm(pct.change2 ~ ticker + sumNegV + sumPosV + sumCompoundV + sumConL + sumLitL +sumNegL + sumPosL + sumSupL + sumUncert + count, data = na.omit(ModelData), na.action =  na.exclude)
+stepResults2 <- step(fullmodel2, direction = "backward", trace=FALSE ) 
+
+stepResults2$call$formula
+```
+
+Determining stepwise model pcnt change 2 
+```{r}
+BestStepWiseModel2 <- lm(stepResults2$call$formula, data = na.omit(ModelData), 
+    na.action = na.exclude)
+
+summary(BestStepWiseModel2)
+
+plot(BestStepWiseModel2)
+```
+
+
+backward selection with pct change 3
+```{r}
+fullmodel3 <- lm(pct.change3 ~ ticker + sumNegV + sumPosV + sumCompoundV + sumConL + sumLitL +sumNegL + sumPosL + sumSupL + sumUncert + count, data = na.omit(ModelData), na.action =  na.exclude)
+stepResults3 <- step(fullmodel3, direction = "backward", trace=FALSE ) 
+
+stepResults3$call$formula
+```
+
+Determining stepwise model pcnt change 3
+```{r}
+BestStepWiseModel3 <- lm(stepResults3$call$formula, data = na.omit(ModelData), na.action = na.exclude)
+
+summary(BestStepWiseModel3)
+
+plot(BestStepWiseModel3)
+```
+
+backward selection with pct change 7
+```{r}
+fullmodel7 <- lm(pct.change7 ~ ticker + sumNegV + sumPosV + sumCompoundV + sumConL + sumLitL +sumNegL + sumPosL + sumSupL + sumUncert + count, data = na.omit(ModelData), na.action =  na.exclude)
+stepResults7 <- step(fullmodel7, direction = "backward", trace=FALSE ) 
+
+stepResults7$call$formula
+```
+
+Determining stepwise model pcnt change 7
+```{r}
+BestStepWiseModel7 <- lm(stepResults7$call$formula, data = na.omit(ModelData), na.action = na.exclude)
+
+summary(BestStepWiseModel7)
+
+plot(BestStepWiseModel7)
+```
+
+backward selection with pct change 30
+```{r}
+fullmodel30 <- lm(pct.change30 ~ ticker + sumNegV + sumPosV + sumCompoundV + sumConL + sumLitL +sumNegL + sumPosL + sumSupL + sumUncert + count, data = na.omit(ModelData), na.action =  na.exclude)
+stepResults30 <- step(fullmodel30, direction = "backward", trace=FALSE ) 
+
+stepResults30$call$formula
+```
+
+Determining stepwise model pcnt change 30
+```{r}
+BestStepWiseModel30 <- lm(stepResults30$call$formula, data = na.omit(ModelData), na.action = na.exclude)
+
+summary(BestStepWiseModel30)
+
+plot(BestStepWiseModel30)
+```
+
+backward selection with pct change 90
+```{r}
+fullmodel90 <- lm(pct.change90 ~ ticker + sumNegV + sumPosV + sumCompoundV + sumConL + sumLitL +sumNegL + sumPosL + sumSupL + sumUncert + count, data = na.omit(ModelData), na.action =  na.exclude)
+stepResults90 <- step(fullmodel90, direction = "backward", trace=FALSE ) 
+
+stepResults90$call$formula
+```
+
+Determining stepwise model pcnt change 90
+```{r}
+BestStepWiseModel90 <- lm(stepResults90$call$formula, data = na.omit(ModelData), na.action = na.exclude)
+
+summary(BestStepWiseModel90)
+
+plot(BestStepWiseModel90)
+```
+
+
+```{r}
+ModelData %>% 
+  ggplot(aes(pct.change30)) + geom_histogram(binwidth = .01)
+```
+
+```{r}
+ModelData %>% 
+  ggplot(aes(pct.change2)) + geom_histogram(binwidth = .01)
+```
+
+```{r}
+library(stargazer)
+
+finalModel <- lm(pct.change2 ~ sumCompoundV + count + ticker, data = na.omit(ModelData), na.action = na.exclude)
+
+summary(finalModel)
+
+stargazer(finalModel, type = "html", 
+          title            = "Model Results")
+```
+
+
